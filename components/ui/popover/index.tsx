@@ -1,34 +1,34 @@
-'use client';
-import React from 'react';
-import { View, Pressable, ScrollView, ViewStyle } from 'react-native';
+'use client'
+import React from 'react'
+import { View, Pressable, ScrollView, ViewStyle } from 'react-native'
 import {
   Motion,
   createMotionAnimatedComponent,
   AnimatePresence,
-  MotionComponentProps,
-} from '@legendapp/motion';
-import { createPopover } from '@gluestack-ui/core/popover/creator';
-import { tva } from '@gluestack-ui/utils/nativewind-utils';
-import {
+  MotionComponentProps
+} from '@legendapp/motion'
+import { createPopover } from '@gluestack-ui/core/popover/creator'
+import { tva ,
   withStyleContext,
-  useStyleContext,
-} from '@gluestack-ui/utils/nativewind-utils';
-import { cssInterop } from 'nativewind';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+  useStyleContext
+} from '@gluestack-ui/utils/nativewind-utils'
+
+import { cssInterop } from 'nativewind'
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
 
 type IAnimatedPressableProps = React.ComponentProps<typeof Pressable> &
   MotionComponentProps<typeof Pressable, ViewStyle, unknown, unknown, unknown>;
 
 const AnimatedPressable = createMotionAnimatedComponent(
   Pressable
-) as React.ComponentType<IAnimatedPressableProps>;
+) as React.ComponentType<IAnimatedPressableProps>
 
-const SCOPE = 'POPOVER';
+const SCOPE = 'POPOVER'
 
 type IMotionViewProps = React.ComponentProps<typeof View> &
   MotionComponentProps<typeof View, ViewStyle, unknown, unknown, unknown>;
 
-const MotionView = Motion.View as React.ComponentType<IMotionViewProps>;
+const MotionView = Motion.View as React.ComponentType<IMotionViewProps>
 
 const UIPopover = createPopover({
   Root: withStyleContext(View, SCOPE),
@@ -40,10 +40,10 @@ const UIPopover = createPopover({
   Footer: View,
   Header: View,
   AnimatePresence: AnimatePresence,
-});
+})
 
-cssInterop(MotionView, { className: 'style' });
-cssInterop(AnimatedPressable, { className: 'style' });
+cssInterop(MotionView, { className: 'style', })
+cssInterop(AnimatedPressable, { className: 'style', })
 
 const popoverStyle = tva({
   base: 'group/popover w-full h-full justify-center items-center web:pointer-events-none',
@@ -56,7 +56,7 @@ const popoverStyle = tva({
       full: '',
     },
   },
-});
+})
 
 const popoverArrowStyle = tva({
   base: 'bg-background-0 z-[1] border absolute overflow-hidden h-3.5 w-3.5 border-outline-100',
@@ -88,15 +88,15 @@ const popoverArrowStyle = tva({
         'data-[flip=false]:border-r-0 data-[flip=false]:border-t-0 data-[flip=true]:border-l-0 data-[flip=true]:border-b-0',
     },
   },
-});
+})
 
 const popoverBackdropStyle = tva({
   base: 'absolute left-0 top-0 right-0 bottom-0 web:cursor-default',
-});
+})
 
 const popoverCloseButtonStyle = tva({
   base: 'group/popover-close-button z-[1] rounded-sm data-[focus-visible=true]:web:bg-background-100 web:outline-0 web:cursor-pointer',
-});
+})
 
 const popoverContentStyle = tva({
   base: 'bg-background-0 rounded-lg overflow-hidden border border-outline-100 w-full',
@@ -109,19 +109,19 @@ const popoverContentStyle = tva({
       full: 'p-6',
     },
   },
-});
+})
 
 const popoverHeaderStyle = tva({
   base: 'flex-row justify-between items-center',
-});
+})
 
 const popoverBodyStyle = tva({
   base: '',
-});
+})
 
 const popoverFooterStyle = tva({
   base: 'flex-row justify-between items-center',
-});
+})
 
 type IPopoverProps = React.ComponentProps<typeof UIPopover> &
   VariantProps<typeof popoverStyle> & { className?: string };
@@ -161,18 +161,18 @@ const Popover = React.forwardRef<
       ref={ref}
       placement={placement}
       {...props}
-      className={popoverStyle({ size, class: className })}
-      context={{ size, placement }}
+      className={popoverStyle({ size, class: className, })}
+      context={{ size, placement, }}
       pointerEvents="box-none"
     />
-  );
-});
+  )
+})
 
 const PopoverContent = React.forwardRef<
   React.ComponentRef<typeof UIPopover.Content>,
   IPopoverContentProps
 >(function PopoverContent({ className, size, ...props }, ref) {
-  const { size: parentSize } = useStyleContext(SCOPE);
+  const { size: parentSize, } = useStyleContext(SCOPE)
 
   return (
     <UIPopover.Content
@@ -198,14 +198,14 @@ const PopoverContent = React.forwardRef<
       })}
       pointerEvents="auto"
     />
-  );
-});
+  )
+})
 
 const PopoverArrow = React.forwardRef<
   React.ComponentRef<typeof UIPopover.Arrow>,
   IPopoverArrowProps
 >(function PopoverArrow({ className, ...props }, ref) {
-  const { placement } = useStyleContext(SCOPE);
+  const { placement, } = useStyleContext(SCOPE)
   return (
     <UIPopover.Arrow
       ref={ref}
@@ -226,8 +226,8 @@ const PopoverArrow = React.forwardRef<
         placement,
       })}
     />
-  );
-});
+  )
+})
 
 const PopoverBackdrop = React.forwardRef<
   React.ComponentRef<typeof UIPopover.Backdrop>,
@@ -261,8 +261,8 @@ const PopoverBackdrop = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 const PopoverBody = React.forwardRef<
   React.ComponentRef<typeof UIPopover.Body>,
@@ -276,8 +276,8 @@ const PopoverBody = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 const PopoverCloseButton = React.forwardRef<
   React.ComponentRef<typeof UIPopover.CloseButton>,
@@ -291,8 +291,8 @@ const PopoverCloseButton = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 const PopoverFooter = React.forwardRef<
   React.ComponentRef<typeof UIPopover.Footer>,
@@ -306,8 +306,8 @@ const PopoverFooter = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 const PopoverHeader = React.forwardRef<
   React.ComponentRef<typeof UIPopover.Header>,
@@ -321,17 +321,17 @@ const PopoverHeader = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
-Popover.displayName = 'Popover';
-PopoverArrow.displayName = 'PopoverArrow';
-PopoverBackdrop.displayName = 'PopoverBackdrop';
-PopoverContent.displayName = 'PopoverContent';
-PopoverHeader.displayName = 'PopoverHeader';
-PopoverFooter.displayName = 'PopoverFooter';
-PopoverBody.displayName = 'PopoverBody';
-PopoverCloseButton.displayName = 'PopoverCloseButton';
+Popover.displayName = 'Popover'
+PopoverArrow.displayName = 'PopoverArrow'
+PopoverBackdrop.displayName = 'PopoverBackdrop'
+PopoverContent.displayName = 'PopoverContent'
+PopoverHeader.displayName = 'PopoverHeader'
+PopoverFooter.displayName = 'PopoverFooter'
+PopoverBody.displayName = 'PopoverBody'
+PopoverCloseButton.displayName = 'PopoverCloseButton'
 
 export {
   Popover,
@@ -341,5 +341,5 @@ export {
   PopoverFooter,
   PopoverHeader,
   PopoverBody,
-  PopoverContent,
-};
+  PopoverContent
+}

@@ -1,37 +1,37 @@
-'use client';
-import React from 'react';
-import { createAlertDialog } from '@gluestack-ui/core/alert-dialog/creator';
-import { tva } from '@gluestack-ui/utils/nativewind-utils';
-import {
+'use client'
+import React from 'react'
+import { createAlertDialog } from '@gluestack-ui/core/alert-dialog/creator'
+import { tva ,
   withStyleContext,
-  useStyleContext,
-} from '@gluestack-ui/utils/nativewind-utils';
+  useStyleContext
+} from '@gluestack-ui/utils/nativewind-utils'
 
-import { cssInterop } from 'nativewind';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+
+import { cssInterop } from 'nativewind'
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
 import {
   Motion,
   AnimatePresence,
   createMotionAnimatedComponent,
-  MotionComponentProps,
-} from '@legendapp/motion';
-import { View, Pressable, ScrollView, ViewStyle } from 'react-native';
+  MotionComponentProps
+} from '@legendapp/motion'
+import { View, Pressable, ScrollView, ViewStyle } from 'react-native'
 
-const SCOPE = 'ALERT_DIALOG';
+const SCOPE = 'ALERT_DIALOG'
 
-const RootComponent = withStyleContext(View, SCOPE);
+const RootComponent = withStyleContext(View, SCOPE)
 
 type IMotionViewProps = React.ComponentProps<typeof View> &
   MotionComponentProps<typeof View, ViewStyle, unknown, unknown, unknown>;
 
-const MotionView = Motion.View as React.ComponentType<IMotionViewProps>;
+const MotionView = Motion.View as React.ComponentType<IMotionViewProps>
 
 type IAnimatedPressableProps = React.ComponentProps<typeof Pressable> &
   MotionComponentProps<typeof Pressable, ViewStyle, unknown, unknown, unknown>;
 
 const AnimatedPressable = createMotionAnimatedComponent(
   Pressable
-) as React.ComponentType<IAnimatedPressableProps>;
+) as React.ComponentType<IAnimatedPressableProps>
 
 const UIAccessibleAlertDialog = createAlertDialog({
   Root: RootComponent,
@@ -42,10 +42,10 @@ const UIAccessibleAlertDialog = createAlertDialog({
   Footer: View,
   Backdrop: AnimatedPressable,
   AnimatePresence: AnimatePresence,
-});
+})
 
-cssInterop(MotionView, { className: 'style' });
-cssInterop(AnimatedPressable, { className: 'style' });
+cssInterop(MotionView, { className: 'style', })
+cssInterop(AnimatedPressable, { className: 'style', })
 
 const alertDialogStyle = tva({
   base: 'group/modal w-full h-full justify-center items-center web:pointer-events-none',
@@ -58,7 +58,7 @@ const alertDialogStyle = tva({
       full: '',
     },
   },
-});
+})
 
 const alertDialogContentStyle = tva({
   base: 'bg-background-0 rounded-lg overflow-hidden border border-outline-100 p-6',
@@ -71,25 +71,25 @@ const alertDialogContentStyle = tva({
       full: 'w-full',
     },
   },
-});
+})
 
 const alertDialogCloseButtonStyle = tva({
   base: 'group/alert-dialog-close-button z-10 rounded-sm p-2 data-[focus-visible=true]:bg-background-100 web:cursor-pointer outline-0',
-});
+})
 
 const alertDialogHeaderStyle = tva({
   base: 'justify-between items-center flex-row',
-});
+})
 
 const alertDialogFooterStyle = tva({
   base: 'flex-row justify-end items-center gap-3',
-});
+})
 
-const alertDialogBodyStyle = tva({ base: '' });
+const alertDialogBodyStyle = tva({ base: '', })
 
 const alertDialogBackdropStyle = tva({
   base: 'absolute left-0 top-0 right-0 bottom-0 bg-background-dark web:cursor-default',
-});
+})
 
 type IAlertDialogProps = React.ComponentPropsWithoutRef<
   typeof UIAccessibleAlertDialog
@@ -134,18 +134,18 @@ const AlertDialog = React.forwardRef<
     <UIAccessibleAlertDialog
       ref={ref}
       {...props}
-      className={alertDialogStyle({ class: className })}
-      context={{ size }}
+      className={alertDialogStyle({ class: className, })}
+      context={{ size, }}
       pointerEvents="box-none"
     />
-  );
-});
+  )
+})
 
 const AlertDialogContent = React.forwardRef<
   React.ComponentRef<typeof UIAccessibleAlertDialog.Content>,
   IAlertDialogContentProps
 >(function AlertDialogContent({ className, size, ...props }, ref) {
-  const { size: parentSize } = useStyleContext(SCOPE);
+  const { size: parentSize, } = useStyleContext(SCOPE)
 
   return (
     <UIAccessibleAlertDialog.Content
@@ -181,8 +181,8 @@ const AlertDialogContent = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 const AlertDialogCloseButton = React.forwardRef<
   React.ComponentRef<typeof UIAccessibleAlertDialog.CloseButton>,
@@ -196,8 +196,8 @@ const AlertDialogCloseButton = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 const AlertDialogHeader = React.forwardRef<
   React.ComponentRef<typeof UIAccessibleAlertDialog.Header>,
@@ -211,8 +211,8 @@ const AlertDialogHeader = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 const AlertDialogFooter = React.forwardRef<
   React.ComponentRef<typeof UIAccessibleAlertDialog.Footer>,
@@ -226,8 +226,8 @@ const AlertDialogFooter = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 const AlertDialogBody = React.forwardRef<
   React.ComponentRef<typeof UIAccessibleAlertDialog.Body>,
@@ -241,8 +241,8 @@ const AlertDialogBody = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 const AlertDialogBackdrop = React.forwardRef<
   React.ComponentRef<typeof UIAccessibleAlertDialog.Backdrop>,
@@ -274,16 +274,16 @@ const AlertDialogBackdrop = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
-AlertDialog.displayName = 'AlertDialog';
-AlertDialogContent.displayName = 'AlertDialogContent';
-AlertDialogCloseButton.displayName = 'AlertDialogCloseButton';
-AlertDialogHeader.displayName = 'AlertDialogHeader';
-AlertDialogFooter.displayName = 'AlertDialogFooter';
-AlertDialogBody.displayName = 'AlertDialogBody';
-AlertDialogBackdrop.displayName = 'AlertDialogBackdrop';
+AlertDialog.displayName = 'AlertDialog'
+AlertDialogContent.displayName = 'AlertDialogContent'
+AlertDialogCloseButton.displayName = 'AlertDialogCloseButton'
+AlertDialogHeader.displayName = 'AlertDialogHeader'
+AlertDialogFooter.displayName = 'AlertDialogFooter'
+AlertDialogBody.displayName = 'AlertDialogBody'
+AlertDialogBackdrop.displayName = 'AlertDialogBackdrop'
 
 export {
   AlertDialog,
@@ -292,5 +292,5 @@ export {
   AlertDialogHeader,
   AlertDialogFooter,
   AlertDialogBody,
-  AlertDialogBackdrop,
-};
+  AlertDialogBackdrop
+}

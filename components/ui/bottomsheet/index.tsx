@@ -5,41 +5,41 @@ import GorhomBottomSheet, {
   BottomSheetTextInput as GorhomBottomSheetInput,
   BottomSheetScrollView as GorhomBottomSheetScrollView,
   BottomSheetFlatList as GorhomBottomSheetFlatList,
-  BottomSheetSectionList as GorhomBottomSheetSectionList,
-} from '@gorhom/bottom-sheet';
-import { Platform } from 'react-native';
-import type { PressableProps, TextProps } from 'react-native';
-import { FocusScope } from '@gluestack-ui/utils/aria';
+  BottomSheetSectionList as GorhomBottomSheetSectionList
+} from '@gorhom/bottom-sheet'
+import { Platform , Pressable, Text } from 'react-native'
+import type { PressableProps, TextProps } from 'react-native'
+import { FocusScope } from '@gluestack-ui/utils/aria'
 import React, {
   createContext,
   useCallback,
   useContext,
   useMemo,
   useRef,
-  useState,
-} from 'react';
-import { Pressable, Text } from 'react-native';
-import { cssInterop } from 'nativewind';
-import { tva } from '@gluestack-ui/utils/nativewind-utils';
+  useState
+} from 'react'
+
+import { cssInterop } from 'nativewind'
+import { tva } from '@gluestack-ui/utils/nativewind-utils'
 
 const bottomSheetBackdropStyle = tva({
   base: 'absolute inset-0 flex-1 touch-none select-none bg-black opacity-0',
-});
+})
 
 const bottomSheetContentStyle = tva({
   base: 'mt-2',
-});
+})
 const bottomSheetTriggerStyle = tva({
   base: '',
-});
+})
 
 const bottomSheetIndicatorStyle = tva({
   base: 'py-1 w-full items-center rounded-t-lg ',
-});
+})
 
 const bottomSheetItemStyle = tva({
   base: 'p-3 flex-row items-center rounded-sm w-full disabled:opacity-0.4 web:pointer-events-auto disabled:cursor-not-allowed hover:bg-background-50 active:bg-background-100 focus:bg-background-100 web:focus-visible:bg-background-100',
-});
+})
 
 const BottomSheetContext = createContext<{
   visible: boolean;
@@ -48,10 +48,10 @@ const BottomSheetContext = createContext<{
   handleOpen: () => void;
 }>({
   visible: false,
-  bottomSheetRef: { current: null },
+  bottomSheetRef: { current: null, },
   handleClose: () => {},
   handleOpen: () => {},
-});
+})
 
 type IBottomSheetProps = React.ComponentProps<typeof GorhomBottomSheet>;
 export const BottomSheet = ({
@@ -65,21 +65,21 @@ export const BottomSheet = ({
   onOpen?: () => void;
   onClose?: () => void;
 }) => {
-  const bottomSheetRef = useRef<GorhomBottomSheet>(null);
+  const bottomSheetRef = useRef<GorhomBottomSheet>(null)
 
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible,] = useState(false)
 
   const handleOpen = useCallback(() => {
-    bottomSheetRef.current?.snapToIndex(snapToIndex);
-    setVisible(true);
-    onOpen && onOpen();
-  }, [onOpen, snapToIndex]);
+    bottomSheetRef.current?.snapToIndex(snapToIndex)
+    setVisible(true)
+    onOpen && onOpen()
+  }, [onOpen, snapToIndex,])
 
   const handleClose = useCallback(() => {
-    bottomSheetRef.current?.close();
-    setVisible(false);
-    onClose && onClose();
-  }, [onClose]);
+    bottomSheetRef.current?.close()
+    setVisible(false)
+    onClose && onClose()
+  }, [onClose,])
 
   return (
     <BottomSheetContext.Provider
@@ -92,8 +92,8 @@ export const BottomSheet = ({
     >
       {props.children}
     </BottomSheetContext.Provider>
-  );
-};
+  )
+}
 
 export const BottomSheetPortal = ({
   snapPoints,
@@ -105,16 +105,16 @@ export const BottomSheetPortal = ({
   snapToIndex?: number;
   snapPoints: string[];
 }) => {
-  const { bottomSheetRef, handleClose } = useContext(BottomSheetContext);
+  const { bottomSheetRef, handleClose, } = useContext(BottomSheetContext)
 
   const handleSheetChanges = useCallback(
     (index: number) => {
       if (index === 0 || index === -1) {
-        handleClose();
+        handleClose()
       }
     },
-    [handleClose]
-  );
+    [handleClose,]
+  )
 
   return (
     <GorhomBottomSheet
@@ -129,19 +129,19 @@ export const BottomSheetPortal = ({
     >
       {props.children}
     </GorhomBottomSheet>
-  );
-};
+  )
+}
 
 export const BottomSheetTrigger = ({
   className,
   ...props
 }: PressableProps & { className?: string }) => {
-  const { handleOpen } = useContext(BottomSheetContext);
+  const { handleOpen, } = useContext(BottomSheetContext)
   return (
     <Pressable
       onPress={(e) => {
-        props.onPress && props.onPress(e);
-        handleOpen();
+        props.onPress && props.onPress(e)
+        handleOpen()
       }}
       {...props}
       className={bottomSheetTriggerStyle({
@@ -150,8 +150,8 @@ export const BottomSheetTrigger = ({
     >
       {props.children}
     </Pressable>
-  );
-};
+  )
+}
 type IBottomSheetBackdrop = React.ComponentProps<
   typeof GorhomBottomSheetBackdrop
 >;
@@ -172,10 +172,10 @@ export const BottomSheetBackdrop = ({
       appearsOnIndex={appearsOnIndex}
       {...props}
     />
-  );
-};
+  )
+}
 
-cssInterop(GorhomBottomSheetBackdrop, { className: 'style' });
+cssInterop(GorhomBottomSheetBackdrop, { className: 'style', })
 
 type IBottomSheetDragIndicator = React.ComponentProps<typeof BottomSheetHandle>;
 
@@ -194,28 +194,28 @@ export const BottomSheetDragIndicator = ({
     >
       {children}
     </BottomSheetHandle>
-  );
-};
+  )
+}
 
-cssInterop(BottomSheetHandle, { className: 'style' });
+cssInterop(BottomSheetHandle, { className: 'style', })
 
 type IBottomSheetContent = React.ComponentProps<typeof GorhomBottomSheetView>;
 
 export const BottomSheetContent = ({ ...props }: IBottomSheetContent) => {
-  const { handleClose, visible } = useContext(BottomSheetContext);
+  const { handleClose, visible, } = useContext(BottomSheetContext)
   const keyDownHandlers = useMemo(() => {
     return Platform.OS === 'web'
       ? {
           onKeyDown: (e: React.KeyboardEvent) => {
             if (e.key === 'Escape') {
-              e.preventDefault();
-              handleClose();
-              return;
+              e.preventDefault()
+              handleClose()
+              return
             }
           },
         }
-      : {};
-  }, [handleClose]);
+      : {}
+  }, [handleClose,])
 
   if (Platform.OS === 'web')
     return (
@@ -233,7 +233,7 @@ export const BottomSheetContent = ({ ...props }: IBottomSheetContent) => {
           </FocusScope>
         )}
       </GorhomBottomSheetView>
-    );
+    )
 
   return (
     <GorhomBottomSheetView
@@ -246,10 +246,10 @@ export const BottomSheetContent = ({ ...props }: IBottomSheetContent) => {
     >
       {props.children}
     </GorhomBottomSheetView>
-  );
-};
+  )
+}
 
-cssInterop(GorhomBottomSheetView, { className: 'style' });
+cssInterop(GorhomBottomSheetView, { className: 'style', })
 
 export const BottomSheetItem = ({
   children,
@@ -259,7 +259,7 @@ export const BottomSheetItem = ({
 }: PressableProps & {
   closeOnSelect?: boolean;
 }) => {
-  const { handleClose } = useContext(BottomSheetContext);
+  const { handleClose, } = useContext(BottomSheetContext)
   return (
     <Pressable
       {...props}
@@ -268,27 +268,27 @@ export const BottomSheetItem = ({
       })}
       onPress={(e) => {
         if (closeOnSelect) {
-          handleClose();
+          handleClose()
         }
-        props.onPress && props.onPress(e);
+        props.onPress && props.onPress(e)
       }}
       role="button"
     >
       {children}
     </Pressable>
-  );
-};
+  )
+}
 
 export const BottomSheetItemText = ({ ...props }: TextProps) => {
-  return <Text {...props} />;
-};
+  return <Text {...props} />
+}
 
-export const BottomSheetScrollView = GorhomBottomSheetScrollView;
-export const BottomSheetFlatList = GorhomBottomSheetFlatList;
-export const BottomSheetSectionList = GorhomBottomSheetSectionList;
-export const BottomSheetTextInput = GorhomBottomSheetInput;
+export const BottomSheetScrollView = GorhomBottomSheetScrollView
+export const BottomSheetFlatList = GorhomBottomSheetFlatList
+export const BottomSheetSectionList = GorhomBottomSheetSectionList
+export const BottomSheetTextInput = GorhomBottomSheetInput
 
-cssInterop(GorhomBottomSheetInput, { className: 'style' });
-cssInterop(GorhomBottomSheetScrollView, { className: 'style' });
-cssInterop(GorhomBottomSheetFlatList, { className: 'style' });
-cssInterop(GorhomBottomSheetSectionList, { className: 'style' });
+cssInterop(GorhomBottomSheetInput, { className: 'style', })
+cssInterop(GorhomBottomSheetScrollView, { className: 'style', })
+cssInterop(GorhomBottomSheetFlatList, { className: 'style', })
+cssInterop(GorhomBottomSheetSectionList, { className: 'style', })

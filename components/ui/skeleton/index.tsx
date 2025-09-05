@@ -1,7 +1,7 @@
-import React, { forwardRef } from 'react';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
-import { Animated, Easing, Platform, View } from 'react-native';
-import { skeletonStyle, skeletonTextStyle } from './styles';
+import React, { forwardRef } from 'react'
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
+import { Animated, Easing, Platform, View } from 'react-native'
+import { skeletonStyle, skeletonTextStyle } from './styles'
 
 type ISkeletonProps = React.ComponentProps<typeof View> &
   VariantProps<typeof skeletonStyle> & {
@@ -32,10 +32,10 @@ const Skeleton = forwardRef<
   },
   ref
 ) {
-  const pulseAnim = new Animated.Value(1);
-  const customTimingFunction = Easing.bezier(0.4, 0, 0.6, 1);
-  const fadeDuration = 0.6;
-  const animationDuration = (fadeDuration * 10000) / Number(speed); // Convert seconds to milliseconds
+  const pulseAnim = new Animated.Value(1)
+  const customTimingFunction = Easing.bezier(0.4, 0, 0.6, 1)
+  const fadeDuration = 0.6
+  const animationDuration = (fadeDuration * 10000) / Number(speed) // Convert seconds to milliseconds
 
   const pulse = Animated.sequence([
     Animated.timing(pulseAnim, {
@@ -56,13 +56,13 @@ const Skeleton = forwardRef<
       easing: customTimingFunction,
       useNativeDriver: Platform.OS !== 'web',
     }),
-  ]);
+  ])
 
   if (!isLoaded) {
-    Animated.loop(pulse).start();
+    Animated.loop(pulse).start()
     return (
       <Animated.View
-        style={{ opacity: pulseAnim }}
+        style={{ opacity: pulseAnim, }}
         className={`${startColor} ${skeletonStyle({
           variant,
           class: className,
@@ -70,13 +70,13 @@ const Skeleton = forwardRef<
         {...props}
         ref={ref}
       />
-    );
+    )
   } else {
-    Animated.loop(pulse).stop();
+    Animated.loop(pulse).stop()
 
-    return children;
+    return children
   }
-});
+})
 
 const SkeletonText = forwardRef<
   React.ComponentRef<typeof View>,
@@ -102,7 +102,7 @@ const SkeletonText = forwardRef<
           })}`}
           ref={ref}
         >
-          {Array.from({ length: _lines }).map((_, index) => (
+          {Array.from({ length: _lines, }).map((_, index) => (
             <Skeleton
               key={index}
               className={`${startColor} ${skeletonTextStyle({
@@ -112,7 +112,7 @@ const SkeletonText = forwardRef<
             />
           ))}
         </View>
-      );
+      )
     } else {
       return (
         <Skeleton
@@ -122,14 +122,14 @@ const SkeletonText = forwardRef<
           {...props}
           ref={ref}
         />
-      );
+      )
     }
   } else {
-    return children;
+    return children
   }
-});
+})
 
-Skeleton.displayName = 'Skeleton';
-SkeletonText.displayName = 'SkeletonText';
+Skeleton.displayName = 'Skeleton'
+SkeletonText.displayName = 'SkeletonText'
 
-export { Skeleton, SkeletonText };
+export { Skeleton, SkeletonText }

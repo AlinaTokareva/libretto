@@ -1,13 +1,13 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Tabs } from 'expo-router';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import React from 'react'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { Tabs } from 'expo-router'
+import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
 }) {
-  return <FontAwesome size={18} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={18} style={{ marginBottom: -3, }} {...props} />
 }
 
 export default function TabLayout() {
@@ -23,16 +23,16 @@ export default function TabLayout() {
         name="tab1"
         options={{
           title: 'Tab 1',
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          tabBarIcon: ({ color, }) => <TabBarIcon name="star-o" color={color} />,
         }}
       />
       <Tabs.Screen
         name="tab2"
         options={{
           title: 'Tab 2',
-          tabBarIcon: ({ color }) => <TabBarIcon name="star-o" color={color} />,
+          tabBarIcon: ({ color, }) => <TabBarIcon name="star-o" color={color} />,
         }}
       />
     </Tabs>
-  );
+  )
 }

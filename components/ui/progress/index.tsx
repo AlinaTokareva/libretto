@@ -1,23 +1,23 @@
-'use client';
-import React from 'react';
-import { createProgress } from '@gluestack-ui/core/progress/creator';
-import { View } from 'react-native';
-import { tva } from '@gluestack-ui/utils/nativewind-utils';
-import {
+'use client'
+import React from 'react'
+import { createProgress } from '@gluestack-ui/core/progress/creator'
+import { View } from 'react-native'
+import { tva ,
   withStyleContext,
-  useStyleContext,
-} from '@gluestack-ui/utils/nativewind-utils';
-import { cssInterop } from 'nativewind';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+  useStyleContext
+} from '@gluestack-ui/utils/nativewind-utils'
 
-const SCOPE = 'PROGRESS';
+import { cssInterop } from 'nativewind'
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
+
+const SCOPE = 'PROGRESS'
 export const UIProgress = createProgress({
   Root: withStyleContext(View, SCOPE),
   FilledTrack: View,
-});
+})
 
-cssInterop(UIProgress, { className: 'style' });
-cssInterop(UIProgress.FilledTrack, { className: 'style' });
+cssInterop(UIProgress, { className: 'style', })
+cssInterop(UIProgress.FilledTrack, { className: 'style', })
 
 const progressStyle = tva({
   base: 'bg-background-300 rounded-full w-full',
@@ -68,7 +68,7 @@ const progressStyle = tva({
       class: 'h-full w-6 justify-end',
     },
   ],
-});
+})
 
 const progressFilledTrackStyle = tva({
   base: 'bg-primary-500 rounded-full',
@@ -119,7 +119,7 @@ const progressFilledTrackStyle = tva({
       class: 'h-full w-6',
     },
   ],
-});
+})
 
 type IProgressProps = VariantProps<typeof progressStyle> &
   React.ComponentProps<typeof UIProgress>;
@@ -137,19 +137,19 @@ const Progress = React.forwardRef<
     <UIProgress
       ref={ref}
       {...props}
-      className={progressStyle({ size, orientation, class: className })}
-      context={{ size, orientation }}
+      className={progressStyle({ size, orientation, class: className, })}
+      context={{ size, orientation, }}
       orientation={orientation}
     />
-  );
-});
+  )
+})
 
 const ProgressFilledTrack = React.forwardRef<
   React.ComponentRef<typeof UIProgress.FilledTrack>,
   IProgressFilledTrackProps
 >(function ProgressFilledTrack({ className, ...props }, ref) {
-  const { size: parentSize, orientation: parentOrientation } =
-    useStyleContext(SCOPE);
+  const { size: parentSize, orientation: parentOrientation, } =
+    useStyleContext(SCOPE)
 
   return (
     <UIProgress.FilledTrack
@@ -163,7 +163,7 @@ const ProgressFilledTrack = React.forwardRef<
       })}
       {...props}
     />
-  );
-});
+  )
+})
 
-export { Progress, ProgressFilledTrack };
+export { Progress, ProgressFilledTrack }

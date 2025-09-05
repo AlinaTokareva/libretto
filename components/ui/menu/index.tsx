@@ -1,38 +1,38 @@
-'use client';
-import React from 'react';
-import { createMenu } from '@gluestack-ui/core/menu/creator';
-import { tva } from '@gluestack-ui/utils/nativewind-utils';
-import { cssInterop } from 'nativewind';
-import { Pressable, Text, View, ViewStyle } from 'react-native';
+'use client'
+import React from 'react'
+import { createMenu } from '@gluestack-ui/core/menu/creator'
+import { tva } from '@gluestack-ui/utils/nativewind-utils'
+import { cssInterop } from 'nativewind'
+import { Pressable, Text, View, ViewStyle } from 'react-native'
 import {
   Motion,
   AnimatePresence,
-  MotionComponentProps,
-} from '@legendapp/motion';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+  MotionComponentProps
+} from '@legendapp/motion'
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
 
 type IMotionViewProps = React.ComponentProps<typeof View> &
   MotionComponentProps<typeof View, ViewStyle, unknown, unknown, unknown>;
 
-const MotionView = Motion.View as React.ComponentType<IMotionViewProps>;
+const MotionView = Motion.View as React.ComponentType<IMotionViewProps>
 
 const menuStyle = tva({
   base: 'rounded-md bg-background-0 border border-outline-100 p-1 shadow-hard-5',
-});
+})
 
 const menuItemStyle = tva({
   base: 'min-w-[200px] p-3 flex-row items-center rounded data-[hover=true]:bg-background-50 data-[active=true]:bg-background-100 data-[focus=true]:bg-background-50 data-[focus=true]:web:outline-none data-[focus=true]:web:outline-0 data-[disabled=true]:opacity-40 data-[disabled=true]:web:cursor-not-allowed data-[focus-visible=true]:web:outline-2 data-[focus-visible=true]:web:outline-primary-700 data-[focus-visible=true]:web:outline data-[focus-visible=true]:web:cursor-pointer data-[disabled=true]:data-[focus=true]:bg-transparent',
-});
+})
 
 const menuBackdropStyle = tva({
   base: 'absolute top-0 bottom-0 left-0 right-0 web:cursor-default',
   // add this classnames if you want to give background color to backdrop
   // opacity-50 bg-background-500,
-});
+})
 
 const menuSeparatorStyle = tva({
   base: 'bg-background-200 h-px w-full',
-});
+})
 
 const menuItemLabelStyle = tva({
   base: 'text-typography-700 font-normal font-body',
@@ -73,7 +73,7 @@ const menuItemLabelStyle = tva({
       true: 'bg-yellow-500',
     },
   },
-});
+})
 
 const BackdropPressable = React.forwardRef<
   React.ComponentRef<typeof Pressable>,
@@ -88,8 +88,8 @@ const BackdropPressable = React.forwardRef<
       })}
       {...props}
     />
-  );
-});
+  )
+})
 
 type IMenuItemProps = VariantProps<typeof menuItemStyle> & {
   className?: string;
@@ -107,8 +107,8 @@ const Item = React.forwardRef<
       })}
       {...props}
     />
-  );
-});
+  )
+})
 
 const Separator = React.forwardRef<
   React.ComponentRef<typeof View>,
@@ -118,11 +118,11 @@ const Separator = React.forwardRef<
   return (
     <View
       ref={ref}
-      className={menuSeparatorStyle({ class: className })}
+      className={menuSeparatorStyle({ class: className, })}
       {...props}
     />
-  );
-});
+  )
+})
 export const UIMenu = createMenu({
   Root: MotionView,
   Item: Item,
@@ -130,9 +130,9 @@ export const UIMenu = createMenu({
   Backdrop: BackdropPressable,
   AnimatePresence: AnimatePresence,
   Separator: Separator,
-});
+})
 
-cssInterop(MotionView, { className: 'style' });
+cssInterop(MotionView, { className: 'style', })
 
 type IMenuProps = React.ComponentProps<typeof UIMenu> &
   VariantProps<typeof menuStyle> & { className?: string };
@@ -165,11 +165,11 @@ const Menu = React.forwardRef<React.ComponentRef<typeof UIMenu>, IMenuProps>(
         })}
         {...props}
       />
-    );
+    )
   }
-);
+)
 
-const MenuItem = UIMenu.Item;
+const MenuItem = UIMenu.Item
 
 const MenuItemLabel = React.forwardRef<
   React.ComponentRef<typeof UIMenu.ItemLabel>,
@@ -205,13 +205,13 @@ const MenuItemLabel = React.forwardRef<
       })}
       {...props}
     />
-  );
-});
+  )
+})
 
-const MenuSeparator = UIMenu.Separator;
+const MenuSeparator = UIMenu.Separator
 
-Menu.displayName = 'Menu';
-MenuItem.displayName = 'MenuItem';
-MenuItemLabel.displayName = 'MenuItemLabel';
-MenuSeparator.displayName = 'MenuSeparator';
-export { Menu, MenuItem, MenuItemLabel, MenuSeparator };
+Menu.displayName = 'Menu'
+MenuItem.displayName = 'MenuItem'
+MenuItemLabel.displayName = 'MenuItemLabel'
+MenuSeparator.displayName = 'MenuSeparator'
+export { Menu, MenuItem, MenuItemLabel, MenuSeparator }

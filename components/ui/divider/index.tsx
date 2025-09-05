@@ -1,8 +1,8 @@
-'use client';
-import React from 'react';
-import { tva } from '@gluestack-ui/utils/nativewind-utils';
-import { Platform, View } from 'react-native';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+'use client'
+import React from 'react'
+import { tva } from '@gluestack-ui/utils/nativewind-utils'
+import { Platform, View } from 'react-native'
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
 
 const dividerStyle = tva({
   base: 'bg-background-200',
@@ -12,7 +12,7 @@ const dividerStyle = tva({
       horizontal: 'h-px w-full',
     },
   },
-});
+})
 
 type IUIDividerProps = React.ComponentPropsWithoutRef<typeof View> &
   VariantProps<typeof dividerStyle>;
@@ -32,9 +32,9 @@ const Divider = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
-Divider.displayName = 'Divider';
+Divider.displayName = 'Divider'
 
-export { Divider };
+export { Divider }

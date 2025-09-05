@@ -1,20 +1,20 @@
-import React, { forwardRef, memo } from 'react';
-import { H1, H2, H3, H4, H5, H6 } from '@expo/html-elements';
-import { headingStyle } from './styles';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
-import { cssInterop } from 'nativewind';
+import React, { forwardRef, memo } from 'react'
+import { H1, H2, H3, H4, H5, H6 } from '@expo/html-elements'
+import { headingStyle } from './styles'
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
+import { cssInterop } from 'nativewind'
 
 type IHeadingProps = VariantProps<typeof headingStyle> &
   React.ComponentPropsWithoutRef<typeof H1> & {
     as?: React.ElementType;
   };
 
-cssInterop(H1, { className: 'style' });
-cssInterop(H2, { className: 'style' });
-cssInterop(H3, { className: 'style' });
-cssInterop(H4, { className: 'style' });
-cssInterop(H5, { className: 'style' });
-cssInterop(H6, { className: 'style' });
+cssInterop(H1, { className: 'style', })
+cssInterop(H2, { className: 'style', })
+cssInterop(H3, { className: 'style', })
+cssInterop(H4, { className: 'style', })
+cssInterop(H5, { className: 'style', })
+cssInterop(H6, { className: 'style', })
 
 const MappedHeading = memo(
   forwardRef<React.ComponentRef<typeof H1>, IHeadingProps>(
@@ -54,7 +54,7 @@ const MappedHeading = memo(
               // @ts-expect-error : type issue
               ref={ref}
             />
-          );
+          )
         case '2xl':
           return (
             <H2
@@ -73,7 +73,7 @@ const MappedHeading = memo(
               // @ts-expect-error : type issue
               ref={ref}
             />
-          );
+          )
         case 'xl':
           return (
             <H3
@@ -92,7 +92,7 @@ const MappedHeading = memo(
               // @ts-expect-error : type issue
               ref={ref}
             />
-          );
+          )
         case 'lg':
           return (
             <H4
@@ -111,7 +111,7 @@ const MappedHeading = memo(
               // @ts-expect-error : type issue
               ref={ref}
             />
-          );
+          )
         case 'md':
           return (
             <H5
@@ -130,7 +130,7 @@ const MappedHeading = memo(
               // @ts-expect-error : type issue
               ref={ref}
             />
-          );
+          )
         case 'sm':
         case 'xs':
           return (
@@ -150,7 +150,7 @@ const MappedHeading = memo(
               // @ts-expect-error : type issue
               ref={ref}
             />
-          );
+          )
         default:
           return (
             <H4
@@ -169,11 +169,11 @@ const MappedHeading = memo(
               // @ts-expect-error : type issue
               ref={ref}
             />
-          );
+          )
       }
     }
   )
-);
+)
 
 const Heading = memo(
   forwardRef<React.ComponentRef<typeof H1>, IHeadingProps>(function Heading(
@@ -188,7 +188,7 @@ const Heading = memo(
       sub,
       italic,
       highlight,
-    } = props;
+    } = props
 
     if (AsComp) {
       return (
@@ -206,15 +206,15 @@ const Heading = memo(
           })}
           {...props}
         />
-      );
+      )
     }
 
     return (
       <MappedHeading className={className} size={size} ref={ref} {...props} />
-    );
+    )
   })
-);
+)
 
-Heading.displayName = 'Heading';
+Heading.displayName = 'Heading'
 
-export { Heading };
+export { Heading }

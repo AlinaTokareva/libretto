@@ -1,24 +1,24 @@
-'use client';
-import React from 'react';
-import { createInput } from '@gluestack-ui/core/input/creator';
-import { View, Pressable, TextInput } from 'react-native';
-import { tva } from '@gluestack-ui/utils/nativewind-utils';
-import {
+'use client'
+import React from 'react'
+import { createInput } from '@gluestack-ui/core/input/creator'
+import { View, Pressable, TextInput } from 'react-native'
+import { tva ,
   withStyleContext,
-  useStyleContext,
-} from '@gluestack-ui/utils/nativewind-utils';
-import { cssInterop } from 'nativewind';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
-import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator';
+  useStyleContext
+} from '@gluestack-ui/utils/nativewind-utils'
 
-const SCOPE = 'INPUT';
+import { cssInterop } from 'nativewind'
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
+import { PrimitiveIcon, UIIcon } from '@gluestack-ui/core/icon/creator'
+
+const SCOPE = 'INPUT'
 
 const UIInput = createInput({
   Root: withStyleContext(View, SCOPE),
   Icon: UIIcon,
   Slot: Pressable,
   Input: TextInput,
-});
+})
 
 cssInterop(PrimitiveIcon, {
   className: {
@@ -31,7 +31,7 @@ cssInterop(PrimitiveIcon, {
       stroke: true,
     },
   },
-});
+})
 
 const inputStyle = tva({
   base: 'border-background-300 flex-row overflow-hidden content-center data-[hover=true]:border-outline-400 data-[focus=true]:border-primary-700 data-[focus=true]:hover:border-primary-700 data-[disabled=true]:opacity-40 data-[disabled=true]:hover:border-background-300 items-center',
@@ -55,7 +55,7 @@ const inputStyle = tva({
         'rounded-full border data-[invalid=true]:border-error-700 data-[invalid=true]:hover:border-error-700 data-[invalid=true]:data-[focus=true]:border-error-700 data-[invalid=true]:data-[focus=true]:hover:border-error-700 data-[invalid=true]:data-[disabled=true]:hover:border-error-700 data-[focus=true]:web:ring-1 data-[focus=true]:web:ring-inset data-[focus=true]:web:ring-indicator-primary data-[invalid=true]:web:ring-1 data-[invalid=true]:web:ring-inset data-[invalid=true]:web:ring-indicator-error data-[invalid=true]:data-[focus=true]:hover:web:ring-1 data-[invalid=true]:data-[focus=true]:hover:web:ring-inset data-[invalid=true]:data-[focus=true]:hover:web:ring-indicator-error data-[invalid=true]:data-[disabled=true]:hover:web:ring-1 data-[invalid=true]:data-[disabled=true]:hover:web:ring-inset data-[invalid=true]:data-[disabled=true]:hover:web:ring-indicator-error',
     },
   },
-});
+})
 
 const inputIconStyle = tva({
   base: 'justify-center items-center text-typography-400 fill-none',
@@ -69,11 +69,11 @@ const inputIconStyle = tva({
       'xl': 'h-6 w-6',
     },
   },
-});
+})
 
 const inputSlotStyle = tva({
   base: 'justify-center items-center web:disabled:cursor-not-allowed',
-});
+})
 
 const inputFieldStyle = tva({
   base: 'flex-1 text-typography-900 py-0 px-3 placeholder:text-typography-500 h-full ios:leading-[0px] web:cursor-text web:data-[disabled=true]:cursor-not-allowed',
@@ -99,7 +99,7 @@ const inputFieldStyle = tva({
       '6xl': 'text-6xl',
     },
   },
-});
+})
 
 type IInputProps = React.ComponentProps<typeof UIInput> &
   VariantProps<typeof inputStyle> & { className?: string };
@@ -112,12 +112,12 @@ const Input = React.forwardRef<React.ComponentRef<typeof UIInput>, IInputProps>(
       <UIInput
         ref={ref}
         {...props}
-        className={inputStyle({ variant, size, class: className })}
-        context={{ variant, size }}
+        className={inputStyle({ variant, size, class: className, })}
+        context={{ variant, size, }}
       />
-    );
+    )
   }
-);
+)
 
 type IInputIconProps = React.ComponentProps<typeof UIInput.Icon> &
   VariantProps<typeof inputIconStyle> & {
@@ -130,17 +130,17 @@ const InputIcon = React.forwardRef<
   React.ComponentRef<typeof UIInput.Icon>,
   IInputIconProps
 >(function InputIcon({ className, size, ...props }, ref) {
-  const { size: parentSize } = useStyleContext(SCOPE);
+  const { size: parentSize, } = useStyleContext(SCOPE)
 
   if (typeof size === 'number') {
     return (
       <UIInput.Icon
         ref={ref}
         {...props}
-        className={inputIconStyle({ class: className })}
+        className={inputIconStyle({ class: className, })}
         size={size}
       />
-    );
+    )
   } else if (
     (props.height !== undefined || props.width !== undefined) &&
     size === undefined
@@ -149,9 +149,9 @@ const InputIcon = React.forwardRef<
       <UIInput.Icon
         ref={ref}
         {...props}
-        className={inputIconStyle({ class: className })}
+        className={inputIconStyle({ class: className, })}
       />
-    );
+    )
   }
   return (
     <UIInput.Icon
@@ -164,8 +164,8 @@ const InputIcon = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 type IInputSlotProps = React.ComponentProps<typeof UIInput.Slot> &
   VariantProps<typeof inputSlotStyle> & { className?: string };
@@ -182,8 +182,8 @@ const InputSlot = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
 type IInputFieldProps = React.ComponentProps<typeof UIInput.Input> &
   VariantProps<typeof inputFieldStyle> & { className?: string };
@@ -192,7 +192,7 @@ const InputField = React.forwardRef<
   React.ComponentRef<typeof UIInput.Input>,
   IInputFieldProps
 >(function InputField({ className, ...props }, ref) {
-  const { variant: parentVariant, size: parentSize } = useStyleContext(SCOPE);
+  const { variant: parentVariant, size: parentSize, } = useStyleContext(SCOPE)
 
   return (
     <UIInput.Input
@@ -206,12 +206,12 @@ const InputField = React.forwardRef<
         class: className,
       })}
     />
-  );
-});
+  )
+})
 
-Input.displayName = 'Input';
-InputIcon.displayName = 'InputIcon';
-InputSlot.displayName = 'InputSlot';
-InputField.displayName = 'InputField';
+Input.displayName = 'Input'
+InputIcon.displayName = 'InputIcon'
+InputSlot.displayName = 'InputSlot'
+InputField.displayName = 'InputField'
 
-export { Input, InputField, InputIcon, InputSlot };
+export { Input, InputField, InputIcon, InputSlot }

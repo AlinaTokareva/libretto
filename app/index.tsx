@@ -1,15 +1,15 @@
-import React from 'react';
-import Gradient from '@/assets/icons/Gradient';
-import Logo from '@/assets/icons/Logo';
-import { Box } from '@/components/ui/box';
-import { ScrollView } from 'react-native';
-import { Text } from '@/components/ui/text';
+import React from 'react'
+import Gradient from '@/assets/icons/Gradient'
+import Logo from '@/assets/icons/Logo'
+import { Box } from '@/components/ui/box'
+import { ScrollView } from 'react-native'
+import { Text } from '@/components/ui/text'
 
-import { Button, ButtonText } from '@/components/ui/button';
-import { useRouter } from 'expo-router';
-import { Icon } from '@/components/ui/icon';
+import { Button, ButtonText } from '@/components/ui/button'
+import { useRouter } from 'expo-router'
+import { Icon } from '@/components/ui/icon'
 
-const FeatureCard = ({ iconSvg: IconSvg, name, desc }: any) => {
+const FeatureCard = ({ iconSvg: IconSvg, name, desc, }: any) => {
   return (
     <Box
       className="flex-column md:flex-1 m-2 p-4 rounded-lg bg-background-0/40"
@@ -21,11 +21,11 @@ const FeatureCard = ({ iconSvg: IconSvg, name, desc }: any) => {
       </Box>
       <Text className="mt-2">{desc}</Text>
     </Box>
-  );
-};
+  )
+}
 
 export default function Home() {
-  const router = useRouter();
+  const router = useRouter()
   return (
     <Box className="flex-1 bg-background-300 h-[100vh]">
         <Box className="absolute h-[500px] w-[500px] lg:w-[700px] lg:h-[700px]">
@@ -47,7 +47,7 @@ export default function Home() {
               size="md"
               className="bg-primary-500 px-6 py-2 rounded-full"
               onPress={() => {
-                router.push('/tabs/tab1');
+                router.push('/tabs/tab1')
               }}
             >
               <ButtonText>Explore Tab Navigation</ButtonText>
@@ -59,5 +59,5 @@ export default function Home() {
         </Box>
       {/* </ScrollView> */}
     </Box>
-  );
+  )
 }

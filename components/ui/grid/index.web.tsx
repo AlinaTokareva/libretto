@@ -1,7 +1,7 @@
-import React from 'react';
-import { gridStyle, gridItemStyle } from './styles';
+import React from 'react'
+import { gridStyle, gridItemStyle } from './styles'
 
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
 
 type IGridProps = React.ComponentPropsWithoutRef<'div'> &
   VariantProps<typeof gridStyle> & {
@@ -23,8 +23,8 @@ const Grid = React.forwardRef<HTMLDivElement, IGridProps>(function Grid(
   { className, _extra, ...props },
   ref
 ) {
-  const gridClass = _extra?.className;
-  const finalGridClass = gridClass ?? '';
+  const gridClass = _extra?.className
+  const finalGridClass = gridClass ?? ''
   return (
     <div
       ref={ref}
@@ -33,8 +33,8 @@ const Grid = React.forwardRef<HTMLDivElement, IGridProps>(function Grid(
       })}
       {...props}
     />
-  );
-});
+  )
+})
 
 type IGridItemProps = React.ComponentPropsWithoutRef<'div'> &
   VariantProps<typeof gridItemStyle> & {
@@ -45,9 +45,9 @@ type IGridItemProps = React.ComponentPropsWithoutRef<'div'> &
   };
 const GridItem = React.forwardRef<HTMLDivElement, IGridItemProps>(
   function GridItem({ className, _extra, ...props }, ref) {
-    const gridItemClass = _extra?.className;
+    const gridItemClass = _extra?.className
 
-    const finalGridItemClass = gridItemClass ?? '';
+    const finalGridItemClass = gridItemClass ?? ''
     return (
       <div
         ref={ref}
@@ -56,11 +56,11 @@ const GridItem = React.forwardRef<HTMLDivElement, IGridItemProps>(
         })}
         {...props}
       />
-    );
+    )
   }
-);
+)
 
-Grid.displayName = 'Grid';
-GridItem.displayName = 'GridItem';
+Grid.displayName = 'Grid'
+GridItem.displayName = 'GridItem'
 
-export { Grid, GridItem };
+export { Grid, GridItem }

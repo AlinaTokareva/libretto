@@ -1,7 +1,7 @@
-import React from 'react';
-import { skeletonStyle, skeletonTextStyle } from './styles';
+import React from 'react'
+import { skeletonStyle, skeletonTextStyle } from './styles'
 
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
+import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils'
 
 type ISkeletonProps = React.ComponentPropsWithoutRef<'div'> &
   VariantProps<typeof skeletonStyle> & {
@@ -33,12 +33,12 @@ const Skeleton = React.forwardRef<HTMLDivElement, ISkeletonProps>(
           })}`}
           {...props}
         />
-      );
+      )
     } else {
-      return children;
+      return children
     }
   }
-);
+)
 
 type ISkeletonTextProps = React.ComponentPropsWithoutRef<'div'> &
   VariantProps<typeof skeletonTextStyle> & {
@@ -69,7 +69,7 @@ const SkeletonText = React.forwardRef<HTMLDivElement, ISkeletonTextProps>(
               gap,
             })}`}
           >
-            {Array.from({ length: _lines }).map((_, index) => (
+            {Array.from({ length: _lines, }).map((_, index) => (
               <div
                 key={index}
                 className={`animate-pulse ${startColor} ${skeletonTextStyle({
@@ -79,7 +79,7 @@ const SkeletonText = React.forwardRef<HTMLDivElement, ISkeletonTextProps>(
               />
             ))}
           </div>
-        );
+        )
       } else {
         return (
           <div
@@ -89,15 +89,15 @@ const SkeletonText = React.forwardRef<HTMLDivElement, ISkeletonTextProps>(
             })}`}
             {...props}
           />
-        );
+        )
       }
     } else {
-      return children;
+      return children
     }
   }
-);
+)
 
-Skeleton.displayName = 'Skeleton';
-SkeletonText.displayName = 'SkeletonText';
+Skeleton.displayName = 'Skeleton'
+SkeletonText.displayName = 'SkeletonText'
 
-export { Skeleton, SkeletonText };
+export { Skeleton, SkeletonText }
