@@ -4,6 +4,7 @@ import {Colors} from '@/constants/Colors'
 import {useColorScheme} from '@/components/useColorScheme'
 import {FavouriteIcon, Icon} from '@/components/ui/icon'
 import {BookIcon, HomeIcon} from 'lucide-react-native'
+import {MaterialIcons} from '@expo/vector-icons'
 
 
 export default function TabLayout() {
@@ -19,7 +20,7 @@ export default function TabLayout() {
                     name={'index'}
                     options={{
                         title: 'Главная',
-                        tabBarIcon: ({color,}) => <Icon size={28} as={HomeIcon} color={color}/>,
+                        tabBarIcon: ({color,}) => <MaterialIcons color={color} size={28} name={'home'} />,
                     }}
                 />
                 <Tabs.Screen
@@ -27,7 +28,7 @@ export default function TabLayout() {
                     options={{
                         title: 'Библиотека',
                         headerShown: false,
-                        tabBarIcon: ({color,}) => <Icon size={28} as={BookIcon} color={color}/>,
+                        tabBarIcon: ({color,}) => <MaterialIcons color={color} size={28} name={'book'} />,
                     }}
                 />
                 <Tabs.Screen
@@ -35,7 +36,7 @@ export default function TabLayout() {
                     options={{
                         title: 'Избранное',
                         headerShown: false,
-                        tabBarIcon: ({color,}) => <Icon size={28} as={FavouriteIcon} color={color}/>,
+                        tabBarIcon: ({color,}) => <MaterialIcons color={color} size={28} name={'favorite'} />,
                     }}
                 />
                 <Tabs.Screen
@@ -43,7 +44,7 @@ export default function TabLayout() {
                     options={{
                         title: 'Профиль',
                         headerShown: false,
-                        tabBarIcon: ({color,}) => <Icon size={28} as={HomeIcon} color={color}/>,
+                        tabBarIcon: ({color,}) => <MaterialIcons color={color} size={28} name={'person'} />,
                     }}
                 />
             </Tabs>

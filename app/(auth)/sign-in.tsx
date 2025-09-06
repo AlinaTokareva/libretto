@@ -7,6 +7,8 @@ import {Button, ButtonIcon, ButtonText} from '@/components/ui/button'
 import {VStack} from '@/components/ui/vstack'
 import {EyeIcon, EyeOffIcon} from '@/components/ui/icon'
 import {HStack} from '@/components/ui/hstack'
+import {SafeAreaView} from 'react-native-safe-area-context'
+import {Center} from '@/components/ui/center'
 
 
 export default function Page() {
@@ -16,12 +18,12 @@ export default function Page() {
     const [emailAddress, setEmailAddress,] = useState('')
     const [password, setPassword,] = useState('')
 
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword,] = useState(false)
     const handleState = () => {
         setShowPassword((showState) => {
-            return !showState;
-        });
-    };
+            return !showState
+        })
+    }
 
     //Кнопка "Войти"
     const onSignInPress = async () => {
@@ -48,20 +50,16 @@ export default function Page() {
     }
 
     return (
-        <View>
-            <VStack space={'lg'}>
-                <Input
-                    variant="underlined"
-                >
+        <SafeAreaView>
+            <VStack className={'gap-5 p-5'}>
+                <Input>
                     <InputField
                         value={emailAddress}
                         placeholder="Введите email"
                         onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
                     />
                 </Input>
-                <Input
-                    variant="underlined"
-                >
+                <Input>
                     <InputField
                         value={password}
                         placeholder="Введите пароль"
@@ -69,7 +67,7 @@ export default function Page() {
                         onChangeText={(password) => setPassword(password)}
                     />
                     <InputSlot className="pr-3" onPress={handleState}>
-                        <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
+                        <InputIcon as={showPassword ? EyeIcon : EyeOffIcon}/>
                     </InputSlot>
                 </Input>
                 <Button onPress={onSignInPress}>
@@ -79,8 +77,11 @@ export default function Page() {
                     <Link href="/sign-up">
                         <Text>Зарегистрироваться</Text>
                     </Link>
+                    <Link href="/welcome">
+                        <Text>Назад</Text>
+                    </Link>
                 </View>
             </VStack>
-        </View>
+        </SafeAreaView>
     )
 }
