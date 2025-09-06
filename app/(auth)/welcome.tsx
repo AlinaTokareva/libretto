@@ -1,7 +1,7 @@
 import {Button, ButtonIcon, ButtonText} from '@/components/ui/button'
 import {useRouter} from 'expo-router'
 import {SafeAreaView} from 'react-native-safe-area-context'
-import WelcomeSvg from '@/components/svg/WelcomeSvg'
+import WelcomeSvg from '@/assets/svg/WelcomeSvg'
 import {Heading} from '@/components/ui/heading'
 import {Text} from '@/components/ui/text'
 import {Center} from '@/components/ui/center'
@@ -14,9 +14,16 @@ export default function Home() {
 
     return (
         <View>
-            <SafeAreaView className={'flex-1'}>
+            <SafeAreaView className={'p-5'}>
                 <Center className={'h-[100vh] gap-2'}>
-                    <WelcomeSvg width={350} height={350}/>
+                    <WelcomeSvg
+                        style={{
+                            maxWidth: 600,
+                            maxHeight: 400,
+                            width: '100%',
+                            height: '100%',
+                        }}
+                    />
                     <Heading size={'4xl'}>Libretto</Heading>
                     <Text>Твой помощник в книжных делах</Text>
                     <Button
@@ -27,7 +34,7 @@ export default function Home() {
                         }}
                     >
                         <ButtonText>Приступить</ButtonText>
-                        <ButtonIcon as={ArrowRight} />
+                        <ButtonIcon as={ArrowRight}/>
                     </Button>
                 </Center>
             </SafeAreaView>

@@ -8,9 +8,9 @@ import {
 } from '@react-navigation/native'
 import {useFonts} from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import {useColorScheme} from '@/components/useColorScheme'
-import {Slot, usePathname} from 'expo-router'
+import {Slot} from 'expo-router'
 import {ClerkProvider} from '@clerk/clerk-expo'
 import { tokenCache } from '@clerk/clerk-expo/token-cache'
 

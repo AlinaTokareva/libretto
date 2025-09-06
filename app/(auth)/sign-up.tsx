@@ -2,9 +2,9 @@ import {useState} from 'react'
 import {Text, TextInput, TouchableOpacity, View} from 'react-native'
 import {useSignUp} from '@clerk/clerk-expo'
 import {Link, useRouter} from 'expo-router'
-import {Input, InputField, InputIcon, InputSlot} from "@/components/ui/input";
-import {EyeIcon, EyeOffIcon} from "@/components/ui/icon";
-import {Button, ButtonText} from "@/components/ui/button";
+import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input'
+import {EyeIcon, EyeOffIcon} from '@/components/ui/icon'
+import {Button, ButtonText} from '@/components/ui/button'
 
 const SignUpScreen = () => {
     const {isLoaded, signUp, setActive,} = useSignUp()
@@ -15,12 +15,12 @@ const SignUpScreen = () => {
     const [pendingVerification, setPendingVerification,] = useState(false)
     const [code, setCode,] = useState('')
 
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword,] = useState(false)
     const handleState = () => {
         setShowPassword((showState) => {
-            return !showState;
-        });
-    };
+            return !showState
+        })
+    }
 
     //Кнопка "Зарегистрироваться"
     const onSignUpPress = async () => {

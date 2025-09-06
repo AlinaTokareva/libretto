@@ -5,7 +5,7 @@ module.exports = {
     './app/**/*.{html,js,jsx,ts,tsx,mdx}',
     './components/**/*.{html,js,jsx,ts,tsx,mdx}',
   ],
-  presets: [require('nativewind/preset')],
+  presets: [require('nativewind/preset'),],
   important: 'html',
   safelist: [
     {
@@ -175,11 +175,11 @@ module.exports = {
         heading: undefined,
         body: undefined,
         mono: undefined,
-        jakarta: ['var(--font-plus-jakarta-sans)'],
-        roboto: ['var(--font-roboto)'],
-        code: ['var(--font-source-code-pro)'],
-        inter: ['var(--font-inter)'],
-        'space-mono': ['var(--font-space-mono)'],
+        jakarta: ['var(--font-plus-jakarta-sans)',],
+        roboto: ['var(--font-roboto)',],
+        code: ['var(--font-source-code-pro)',],
+        inter: ['var(--font-inter)',],
+        'space-mono': ['var(--font-space-mono)',],
       },
       fontWeight: {
         extrablack: '950',
@@ -200,4 +200,4 @@ module.exports = {
       },
     },
   },
-};
+}

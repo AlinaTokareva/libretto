@@ -1,6 +1,6 @@
 import {useClerk} from '@clerk/clerk-expo'
 import {useRouter} from 'expo-router'
-import {Text, TouchableOpacity} from 'react-native'
+import {Button, ButtonText} from '@/components/ui/button'
 
 export const SignOutButton = () => {
     const {signOut,} = useClerk()
@@ -16,8 +16,8 @@ export const SignOutButton = () => {
     }
 
     return (
-        <TouchableOpacity onPress={handleSignOut}>
-            <Text>Sign out</Text>
-        </TouchableOpacity>
+        <Button onPress={handleSignOut}>
+            <ButtonText>Выход</ButtonText>
+        </Button>
     )
 }

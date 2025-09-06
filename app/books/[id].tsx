@@ -1,11 +1,9 @@
 import React from 'react'
-import {View, Text} from 'react-native'
+import {View} from '@/components/Themed'
 
 const Book = () => {
     return (
-        <View>
-            <Text>My Component</Text>
-        </View>
+        <View />
     )
 }
 

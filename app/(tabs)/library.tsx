@@ -1,6 +1,7 @@
-import {StyleSheet, View,Image} from 'react-native'
+import {StyleSheet, Image} from 'react-native'
 import {SafeAreaView} from 'react-native-safe-area-context'
-
+import {View} from '@/components/Themed'
+import {VStack} from '@/components/ui/vstack'
 
 
 const Library = () => {
@@ -26,11 +27,13 @@ const Library = () => {
     )
 
     return (
+        <View>
             <SafeAreaView>
-                <View style={styles.box}>
+                <VStack style={styles.box}>
                     {books}
-                </View>
+                </VStack>
             </SafeAreaView>
+        </View>
     )
 }
 

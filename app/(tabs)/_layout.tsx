@@ -2,8 +2,6 @@ import {Tabs} from 'expo-router'
 import React from 'react'
 import {Colors} from '@/constants/Colors'
 import {useColorScheme} from '@/components/useColorScheme'
-import {FavouriteIcon, Icon} from '@/components/ui/icon'
-import {BookIcon, HomeIcon} from 'lucide-react-native'
 import {MaterialIcons} from '@expo/vector-icons'
 
 

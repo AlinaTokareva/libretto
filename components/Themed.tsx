@@ -1,5 +1,6 @@
-import {Text as DefaultText, View as DefaultView, useColorScheme} from 'react-native'
+import {Text as DefaultText, View as DefaultView} from 'react-native'
 import {Colors} from '@/constants/Colors'
+import {useColorScheme} from '@/components/useColorScheme'
 
 
 type ThemeProps = {
@@ -38,5 +39,5 @@ export function View(props: ViewProps) {
         'background'
     )
 
-    return <DefaultView style={[{backgroundColor,}, style,]} {...otherProps} />
+    return <DefaultView className={'h-full'} style={[{backgroundColor,}, style,]} {...otherProps} />
 }
