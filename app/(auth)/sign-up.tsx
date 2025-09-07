@@ -1,10 +1,17 @@
-import {useState} from 'react'
+import React, {useState} from 'react'
 import {Text, TextInput, TouchableOpacity, View} from 'react-native'
 import {useSignUp} from '@clerk/clerk-expo'
 import {Link, useRouter} from 'expo-router'
 import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input'
-import {EyeIcon, EyeOffIcon} from '@/components/ui/icon'
+import {AlertCircleIcon, EyeIcon, EyeOffIcon} from '@/components/ui/icon'
 import {Button, ButtonText} from '@/components/ui/button'
+import {
+    FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText,
+    FormControlHelper,
+    FormControlHelperText,
+    FormControlLabel,
+    FormControlLabelText
+} from '@/components/ui/form-control'
 
 const SignUpScreen = () => {
     const {isLoaded, signUp, setActive,} = useSignUp()
@@ -86,28 +93,49 @@ const SignUpScreen = () => {
     return (
         <View>
             <>
-                <Input
-                    variant="underlined"
+                <FormControl
+                    // isInvalid={isInvalid}
+                    size={'md'}
+                    isDisabled={false}
+                    // isReadOnly={false}
+                    isRequired={false}
                 >
-                    <InputField
-                        value={emailAddress}
-                        placeholder="Введите email"
-                        onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-                    />
-                </Input>
-                <Input
-                    variant="underlined"
-                >
-                    <InputField
-                        value={password}
-                        placeholder="Введите пароль"
-                        type={showPassword ? 'text' : 'password'}
-                        onChangeText={(password) => setPassword(password)}
-                    />
-                    <InputSlot className="pr-3" onPress={handleState}>
-                        <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} />
-                    </InputSlot>
-                </Input>
+                    <FormControlLabel>
+                        <FormControlLabelText>Email</FormControlLabelText>
+                    </FormControlLabel>
+                    <Input>
+                        <InputField
+                            value={emailAddress}
+                            placeholder="Введите email"
+                            onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+                        />
+                    </Input>
+                    <FormControlLabel>
+                        <FormControlLabelText>Пароль</FormControlLabelText>
+                    </FormControlLabel>
+                    <Input>
+                        <InputField
+                            value={password}
+                            placeholder="Введите пароль"
+                            type={showPassword ? 'text' : 'password'}
+                            onChangeText={(password) => setPassword(password)}
+                        />
+                        <InputSlot className="pr-3" onPress={handleState}>
+                            <InputIcon as={showPassword ? EyeIcon : EyeOffIcon}/>
+                        </InputSlot>
+                    </Input>
+                    <FormControlHelper>
+                        <FormControlHelperText>
+                            Пароль должен содержать не менее 8 символов
+                        </FormControlHelperText>
+                    </FormControlHelper>
+                    <FormControlError>
+                        <FormControlErrorIcon as={AlertCircleIcon} className="text-red-500"/>
+                        <FormControlErrorText className="text-red-500">
+                            Пароль должен содержать не менее 8 символов
+                        </FormControlErrorText>
+                    </FormControlError>
+                </FormControl>
                 <Button onPress={onSignUpPress}>
                     <ButtonText>Дальше</ButtonText>
                 </Button>
