@@ -12,16 +12,16 @@ import {useEffect} from 'react'
 import {useColorScheme} from '@/components/useColorScheme'
 import {Slot} from 'expo-router'
 import {ClerkProvider} from '@clerk/clerk-expo'
-import { tokenCache } from '@clerk/clerk-expo/token-cache'
+import {tokenCache} from '@clerk/clerk-expo/token-cache'
+import {ruRU} from '@clerk/localizations/ru-RU'
 
-export {
-    // Catch any errors thrown by the Layout component.
-    ErrorBoundary
-} from 'expo-router'
+
+export {ErrorBoundary} from 'expo-router'
 
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
+    const colorScheme = useColorScheme()
     const [loaded, error,] = useFonts({
         SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
         ...FontAwesome.font,
@@ -37,14 +37,9 @@ export default function RootLayout() {
             SplashScreen.hideAsync()
         }
     }, [loaded,])
-    return <RootLayoutNav/>
-}
-
-function RootLayoutNav() {
-    const colorScheme = useColorScheme()
 
     return (
-        <ClerkProvider tokenCache={tokenCache}>
+        <ClerkProvider tokenCache={tokenCache} localization={ruRU}>
             <GluestackUIProvider mode={colorScheme || 'light'}>
                 <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                     <Slot/>

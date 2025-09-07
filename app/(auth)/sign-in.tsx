@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
-import {useSignIn} from '@clerk/clerk-expo'
+import React, {useEffect, useState} from 'react'
+import {isClerkAPIResponseError, useSignIn} from '@clerk/clerk-expo'
 import {Link, useRouter} from 'expo-router'
 import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input'
-import {Button, ButtonText} from '@/components/ui/button'
+import {Button, ButtonSpinner, ButtonText} from '@/components/ui/button'
 import {VStack} from '@/components/ui/vstack'
 import {AlertCircleIcon, AtSignIcon, EyeIcon, EyeOffIcon} from '@/components/ui/icon'
 import {SafeAreaView} from 'react-native-safe-area-context'
@@ -12,9 +12,7 @@ import {
     FormControl,
     FormControlError,
     FormControlErrorIcon,
-    FormControlErrorText,
-    FormControlHelper,
-    FormControlHelperText,
+    FormControlErrorText, FormControlHelper, FormControlHelperText,
     FormControlLabel,
     FormControlLabelText
 } from '@/components/ui/form-control'
@@ -22,6 +20,9 @@ import {Center} from '@/components/ui/center'
 import SignInSvg from '@/assets/svg/SignInSvg'
 import {Heading} from '@/components/ui/heading'
 import {LockKeyholeOpenIcon} from 'lucide-react-native'
+import {ClerkAPIError} from '@clerk/types'
+import {useToggle} from '@/components/hooks/useToggle'
+import {isLoading} from 'expo-font'
 
 
 const SignIn = () => {
@@ -31,38 +32,51 @@ const SignIn = () => {
     const [emailAddress, setEmailAddress,] = useState('')
     const [password, setPassword,] = useState('')
 
-    const [isInvalid, setIsInvalid,] = useState(false)
+    const [errors, setErrors,] = useState<ClerkAPIError[]>([])
+    const [isValid, setIsValid,] = useState(false)
+    const [showPassword, toggleShowPassword,] = useToggle(false)
+    const [loading, setLoading,] = useState(false)
 
-    const [showPassword, setShowPassword,] = useState(false)
-    const handleState = () => {
-        setShowPassword((showState) => {
-            return !showState
-        })
-    }
+    useEffect(() => {
+        setIsValid(password.length > 0 && emailAddress.length > 0)
+    }, [password, emailAddress,])
+
 
     //Кнопка "Войти"
     const onSignInPress = async () => {
+        setErrors([])
+
         if (!isLoaded) return
-        if (!password || !emailAddress) setIsInvalid(true)
+        if (!isValid) return
+        if (loading) return
+
+        setLoading(true)
+
+        const emailAddressN = emailAddress.trim().toLowerCase()
 
         //Запуск процесса входа, через электронную почту и пароль
         try {
             const signInAttempt = await signIn.create({
-                identifier: emailAddress,
+                identifier: emailAddressN,
                 password,
             })
 
             //Добавление сессии и редирект
             if (signInAttempt.status === 'complete') {
                 await setActive({session: signInAttempt.createdSessionId,})
-                router.replace('/')
+                router.replace('/home')
             } else {
-                console.error(JSON.stringify(signInAttempt, null, 2))
+                console.log(JSON.stringify(signInAttempt, null, 2))
+                setLoading(false)
             }
         } catch (err) {
-            console.error(JSON.stringify(err, null, 2))
+            //Вывод ошибки
+            if (isClerkAPIResponseError(err)) setErrors(err.errors)
+            console.log(JSON.stringify(err, null, 2))
+            setLoading(false)
         }
     }
+
 
     return (
         <View>
@@ -76,7 +90,7 @@ const SignIn = () => {
                     </Center>
                     <Heading size={'3xl'}>Войти</Heading>
                     <FormControl
-                        isInvalid={isInvalid}
+                        isInvalid={!!errors?.length}
                         size={'md'}
                     >
                         <FormControlLabel>
@@ -92,7 +106,7 @@ const SignIn = () => {
                                 onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
                             />
                         </Input>
-                        <FormControlLabel>
+                        <FormControlLabel className={'mt-2'}>
                             <FormControlLabelText>Пароль</FormControlLabelText>
                         </FormControlLabel>
                         <Input>
@@ -105,32 +119,41 @@ const SignIn = () => {
                                 type={showPassword ? 'text' : 'password'}
                                 onChangeText={(password) => setPassword(password)}
                             />
-                            <InputSlot className="pr-3" onPress={handleState}>
+                            <InputSlot className="pr-3" onPress={toggleShowPassword}>
                                 <InputIcon as={showPassword ? EyeIcon : EyeOffIcon}/>
                             </InputSlot>
                         </Input>
-                        <FormControlHelper>
-                            <FormControlHelperText>
-                                Пароль должен содержать не менее 8 символов
-                            </FormControlHelperText>
-                        </FormControlHelper>
                         <FormControlError>
                             <FormControlErrorIcon as={AlertCircleIcon} className="text-red-500"/>
                             <FormControlErrorText className="text-red-500">
-                                Пароль должен содержать не менее 8 символов
+                                {errors?.map(item => item.longMessage).concat('')}
                             </FormControlErrorText>
                         </FormControlError>
+                        {!isValid && (
+                            <FormControlHelper>
+                                <FormControlHelperText>Заполните поля для входа</FormControlHelperText>
+                            </FormControlHelper>
+                        )}
                     </FormControl>
 
-                    <Button onPress={onSignInPress}>
-                        <ButtonText>Войти</ButtonText>
+                    <Button
+                        className={'mt-4'}
+                        onPress={onSignInPress}
+                        isDisabled={!isValid}
+                    >
+                        {loading ? (
+                            <>
+                                <ButtonSpinner color={'gray'}/>
+                                <ButtonText className={'font-medium'}> Входим... </ButtonText>
+                            </>
+                        ) : (
+                            <ButtonText>Войти</ButtonText>
+                        )}
                     </Button>
                     <HStack className={'justify-between'}>
+                        <Text>Нет аккаунта?</Text>
                         <Link href="/sign-up">
-                            <Text>Зарегистрироваться</Text>
-                        </Link>
-                        <Link href="/">
-                            <Text>Назад</Text>
+                            <Text className={'underline'}>Зарегистрироваться</Text>
                         </Link>
                     </HStack>
                 </VStack>

@@ -5,7 +5,6 @@ import {Fab, FabIcon} from '@/components/ui/fab'
 import {AddIcon, SearchIcon} from '@/components/ui/icon'
 import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input'
 import {VStack} from '@/components/ui/vstack'
-import React from 'react'
 import ReadingWomanSvg from '@/assets/svg/ReadingWomanSvg'
 
 
