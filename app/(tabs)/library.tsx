@@ -2,6 +2,7 @@ import {StyleSheet, Image} from 'react-native'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import {View} from '@/components/Themed'
 import {VStack} from '@/components/ui/vstack'
+import {Center} from '@/components/ui/center'
 
 
 const Library = () => {
@@ -21,6 +22,7 @@ const Library = () => {
                 height: 170,
                 width: 110,
                 borderRadius: 10,
+                margin: 5,
             }}
             key={item.source.toString()}
         />
@@ -29,9 +31,11 @@ const Library = () => {
     return (
         <View>
             <SafeAreaView>
-                <VStack style={styles.box}>
-                    {books}
-                </VStack>
+                <Center className={'w-full flex-row flex-wrap'}>
+                    {/*<VStack style={styles.box}>*/}
+                        {books}
+                    {/*</VStack>*/}
+                </Center>
             </SafeAreaView>
         </View>
     )
