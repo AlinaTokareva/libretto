@@ -22,6 +22,7 @@ import {Heading} from '@/components/ui/heading'
 import {LockKeyholeOpenIcon} from 'lucide-react-native'
 import {ClerkAPIError} from '@clerk/types'
 import {useToggle} from '@/components/hooks/useToggle'
+import {TouchableOpacity} from 'react-native'
 
 
 const SignIn = () => {
@@ -157,9 +158,9 @@ const SignIn = () => {
 
                     <HStack className={'gap-1.5'}>
                         <Text>Нет аккаунта?</Text>
-                        <Link href="/sign-up">
+                        <TouchableOpacity onPress={() => router.push('/sign-up')}>
                             <Text className={'underline'}>Зарегистрироваться</Text>
-                        </Link>
+                        </TouchableOpacity>
                     </HStack>
                 </VStack>
             </SafeAreaView>

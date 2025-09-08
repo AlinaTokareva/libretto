@@ -24,6 +24,8 @@ import {ClerkAPIError} from '@clerk/types'
 import {useToggle} from '@/components/hooks/useToggle'
 import RecipeBook from '@/assets/svg/RecipeBook'
 import {LockKeyholeOpenIcon} from 'lucide-react-native'
+import {ruRU} from '@/config/clerk/ru-RU'
+import {TouchableOpacity} from 'react-native'
 
 
 const SignUp = () => {
@@ -99,10 +101,19 @@ const SignUp = () => {
             await signUp.prepareEmailAddressVerification({strategy: 'email_code',})
 
             setPendingVerification(true)
-            console.log('всё ок')
         } catch (err) {
             //Вывод ошибки
-            if (isClerkAPIResponseError(err)) setErrors(err.errors)
+            if (isClerkAPIResponseError(err)) {
+                const errors = err.errors.map(error => {
+                    // @ts-ignore
+                    const ruMessage = ruRU.unstable__errors[error.code] as string
+                    return {
+                        ...error,
+                        longMessage: ruMessage,
+                    }
+                })
+                setErrors(errors)
+            }
             console.log(JSON.stringify(err, null, 2))
             setLoading(false)
         }
@@ -277,9 +288,9 @@ const SignUp = () => {
                     {!pendingVerification && (
                         <HStack className={'gap-1.5'}>
                             <Text>Уже есть аккаунт?</Text>
-                            <Link href="/sign-in">
+                            <TouchableOpacity onPress={() => router.push('/sign-in')}>
                                 <Text className={'underline'}>Войти</Text>
-                            </Link>
+                            </TouchableOpacity>
                         </HStack>
                     )}
                 </VStack>

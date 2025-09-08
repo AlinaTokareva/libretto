@@ -13,7 +13,7 @@ const Profile = () => {
         <View>
             <SafeAreaView className={'p-5'}>
                 <Box className={'gap-3'}>
-                    <Heading size={'lg'}>Привет, {user?.lastName || user?.emailAddresses[0].emailAddress}!</Heading>
+                    <Heading size={'lg'}>Привет, {user?.firstName || user?.emailAddresses[0].emailAddress}!</Heading>
                     <SignOutButton/>
                 </Box>
             </SafeAreaView>
