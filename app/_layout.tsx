@@ -9,11 +9,11 @@ import {
 import {useFonts} from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import {useEffect} from 'react'
-import {useColorScheme} from '@/components/useColorScheme'
 import {Slot} from 'expo-router'
 import {ClerkProvider} from '@clerk/clerk-expo'
 import {tokenCache} from '@clerk/clerk-expo/token-cache'
 import {ruRU} from '@clerk/localizations/ru-RU'
+import {useColorScheme} from '@/components/useColorScheme'
 
 
 export {ErrorBoundary} from 'expo-router'
@@ -37,6 +37,10 @@ export default function RootLayout() {
             SplashScreen.hideAsync()
         }
     }, [loaded,])
+
+    useEffect(() => {
+        console.log(colorScheme)
+    }, [colorScheme,])
 
     return (
         <ClerkProvider tokenCache={tokenCache} localization={ruRU}>
