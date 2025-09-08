@@ -1,57 +1,60 @@
-import React, {useState} from 'react'
-import {Text, TextInput, TouchableOpacity, View} from 'react-native'
-import {useSignUp} from '@clerk/clerk-expo'
+import React, {useEffect, useState} from 'react'
+import {isClerkAPIResponseError, useSignUp} from '@clerk/clerk-expo'
 import {Link, useRouter} from 'expo-router'
 import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input'
-import {AlertCircleIcon, EyeIcon, EyeOffIcon} from '@/components/ui/icon'
-import {Button, ButtonText} from '@/components/ui/button'
+import {AlertCircleIcon, AtSignIcon, EyeIcon, EyeOffIcon} from '@/components/ui/icon'
+import {Button, ButtonSpinner, ButtonText} from '@/components/ui/button'
 import {
-    FormControl, FormControlError, FormControlErrorIcon, FormControlErrorText,
+    FormControl,
+    FormControlError,
+    FormControlErrorIcon,
+    FormControlErrorText,
     FormControlHelper,
     FormControlHelperText,
     FormControlLabel,
     FormControlLabelText
 } from '@/components/ui/form-control'
+import {Text, View} from '@/components/Themed'
+import {Center} from '@/components/ui/center'
+import {Heading} from '@/components/ui/heading'
+import {HStack} from '@/components/ui/hstack'
+import {SafeAreaView} from 'react-native-safe-area-context'
+import {VStack} from '@/components/ui/vstack'
+import {ClerkAPIError} from '@clerk/types'
+import {useToggle} from '@/components/hooks/useToggle'
+import RecipeBook from '@/assets/svg/RecipeBook'
+import {LockKeyholeOpenIcon} from 'lucide-react-native'
 
-const SignUpScreen = () => {
+
+const SignUp = () => {
     const {isLoaded, signUp, setActive,} = useSignUp()
     const router = useRouter()
 
     const [emailAddress, setEmailAddress,] = useState('')
     const [password, setPassword,] = useState('')
+    const [firstName, setFirstName,] = useState('')
+    const [lastName, setLastName,] = useState('')
+
     const [pendingVerification, setPendingVerification,] = useState(false)
     const [code, setCode,] = useState('')
 
-    const [showPassword, setShowPassword,] = useState(false)
-    const handleState = () => {
-        setShowPassword((showState) => {
-            return !showState
-        })
-    }
+    const [errors, setErrors,] = useState<ClerkAPIError[]>([])
+    const [isValid, setIsValid,] = useState(false)
+    const [showPassword, toggleShowPassword,] = useToggle(false)
+    const [loading, setLoading,] = useState(false)
+    const [loadingVerify, setLoadingVerify,] = useState(false)
 
-    //Кнопка "Зарегистрироваться"
-    const onSignUpPress = async () => {
-        if (!isLoaded) return
-        console.log(emailAddress, password)
-        try {
-            await signUp.create({
-                emailAddress,
-                password,
-            })
+    useEffect(() => {
+        setIsValid(password.length > 0 && emailAddress.length > 0)
+    }, [password, emailAddress,])
 
-            //Отправка пользователю email с кодом проверки
-            await signUp.prepareEmailAddressVerification({strategy: 'email_code',})
-
-            //Set 'pendingVerification' to true to display second form and capture OTP code
-            setPendingVerification(true)
-        } catch (err) {
-            console.error(JSON.stringify(err, null, 2))
-        }
-    }
 
     //Верификация
     const onVerifyPress = async () => {
+        setErrors([])
+
         if (!isLoaded) return
+        setLoadingVerify(true)
 
         try {
             const signUpAttempt = await signUp.attemptEmailAddressVerification({
@@ -63,91 +66,227 @@ const SignUpScreen = () => {
                 await setActive({session: signUpAttempt.createdSessionId,})
                 router.replace('/')
             } else {
-                console.error(JSON.stringify(signUpAttempt, null, 2))
+                console.log(JSON.stringify(signUpAttempt, null, 2))
+                setLoadingVerify(false)
             }
         } catch (err) {
-            console.error(JSON.stringify(err, null, 2))
+            if (isClerkAPIResponseError(err)) setErrors(err.errors)
+            console.log(JSON.stringify(err, null, 2))
+            setLoadingVerify(false)
         }
     }
 
-    if (pendingVerification) {
-        return (
-            <>
-                <Text>Verify your email</Text>
-                <Input
-                    variant="underlined"
-                >
-                    <InputField
-                        value={code}
-                        placeholder="Enter your verification code"
-                        onChangeText={(code) => setCode(code)}
-                    />
-                </Input>
-                <Button onPress={onVerifyPress}>
-                    <ButtonText>Verify</ButtonText>
-                </Button>
-            </>
-        )
+
+    //Кнопка "Зарегистрироваться"
+    const onSignUpPress = async () => {
+        if (!isLoaded) return
+        if (!isValid) return
+        if (loading) return
+
+        setLoading(true)
+
+        const emailAddressN = emailAddress.trim().toLowerCase()
+
+        try {
+            await signUp.create({
+                emailAddress: emailAddressN,
+                password,
+                firstName,
+                lastName,
+            })
+
+            //Отправка пользователю email с кодом проверки
+            await signUp.prepareEmailAddressVerification({strategy: 'email_code',})
+
+            setPendingVerification(true)
+            console.log('всё ок')
+        } catch (err) {
+            //Вывод ошибки
+            if (isClerkAPIResponseError(err)) setErrors(err.errors)
+            console.log(JSON.stringify(err, null, 2))
+            setLoading(false)
+        }
     }
 
     return (
         <View>
-            <>
-                <FormControl
-                    // isInvalid={isInvalid}
-                    size={'md'}
-                    isDisabled={false}
-                    // isReadOnly={false}
-                    isRequired={false}
-                >
-                    <FormControlLabel>
-                        <FormControlLabelText>Email</FormControlLabelText>
-                    </FormControlLabel>
-                    <Input>
-                        <InputField
-                            value={emailAddress}
-                            placeholder="Введите email"
-                            onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
-                        />
-                    </Input>
-                    <FormControlLabel>
-                        <FormControlLabelText>Пароль</FormControlLabelText>
-                    </FormControlLabel>
-                    <Input>
-                        <InputField
-                            value={password}
-                            placeholder="Введите пароль"
-                            type={showPassword ? 'text' : 'password'}
-                            onChangeText={(password) => setPassword(password)}
-                        />
-                        <InputSlot className="pr-3" onPress={handleState}>
-                            <InputIcon as={showPassword ? EyeIcon : EyeOffIcon}/>
-                        </InputSlot>
-                    </Input>
-                    <FormControlHelper>
-                        <FormControlHelperText>
-                            Пароль должен содержать не менее 8 символов
-                        </FormControlHelperText>
-                    </FormControlHelper>
-                    <FormControlError>
-                        <FormControlErrorIcon as={AlertCircleIcon} className="text-red-500"/>
-                        <FormControlErrorText className="text-red-500">
-                            Пароль должен содержать не менее 8 символов
-                        </FormControlErrorText>
-                    </FormControlError>
-                </FormControl>
-                <Button onPress={onSignUpPress}>
-                    <ButtonText>Дальше</ButtonText>
-                </Button>
-                <View style={{display: 'flex', flexDirection: 'row', gap: 3,}}>
-                    <Text>Уже есть аккаунт?</Text>
-                    <Link href={'/sign-in'}>
-                        <Text>Войти</Text>
-                    </Link>
-                </View>
-            </>
+            <SafeAreaView className={'p-[30px]'}>
+                <VStack className={'gap-3'}>
+                    <Center>
+                        <RecipeBook style={{
+                            width: 300,
+                            height: 250,
+                        }}/>
+                    </Center>
+                    <Heading size={'3xl'}>Регистрация</Heading>
+
+                    {!pendingVerification ? (
+                        <>
+
+                            <FormControl
+                                isInvalid={!!errors?.length}
+                            >
+                                <HStack className={'flex gap-3'}>
+                                    <VStack className={'flex-1'}>
+                                        <FormControlLabel>
+                                            <FormControlLabelText>Фамилия</FormControlLabelText>
+                                        </FormControlLabel>
+                                        <Input>
+                                            <InputField
+                                                value={lastName}
+                                                placeholder="Введите фамилию"
+                                                onChangeText={(lastName) => setLastName(lastName)}
+                                            />
+                                        </Input>
+                                    </VStack>
+                                    <VStack className={'flex-1'}>
+                                        <FormControlLabel>
+                                            <FormControlLabelText>Имя</FormControlLabelText>
+                                        </FormControlLabel>
+                                        <Input>
+                                            <InputField
+                                                value={firstName}
+                                                placeholder="Введите имя"
+                                                onChangeText={(firstName) => setFirstName(firstName)}
+                                            />
+                                        </Input>
+                                    </VStack>
+                                </HStack>
+                            </FormControl>
+                            <FormControl
+                                isInvalid={!!errors?.length}
+                                isRequired={true}
+                            >
+                                <FormControlLabel>
+                                    <FormControlLabelText>Email</FormControlLabelText>
+                                </FormControlLabel>
+                                <Input>
+                                    <InputSlot className="pl-3">
+                                        <InputIcon as={AtSignIcon}/>
+                                    </InputSlot>
+                                    <InputField
+                                        value={emailAddress}
+                                        placeholder="Введите email"
+                                        onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
+                                    />
+                                </Input>
+                            </FormControl>
+                            <FormControl
+                                isInvalid={!!errors?.length}
+                                isRequired={true}
+                            >
+                                <FormControlLabel>
+                                    <FormControlLabelText>Пароль</FormControlLabelText>
+                                </FormControlLabel>
+                                <Input>
+                                    <InputSlot className={'pl-3'}>
+                                        <InputIcon as={LockKeyholeOpenIcon}/>
+                                    </InputSlot>
+                                    <InputField
+                                        value={password}
+                                        placeholder="Введите пароль"
+                                        type={showPassword ? 'text' : 'password'}
+                                        onChangeText={(password) => setPassword(password)}
+                                    />
+                                    <InputSlot className="pr-3" onPress={toggleShowPassword}>
+                                        <InputIcon as={showPassword ? EyeIcon : EyeOffIcon}/>
+                                    </InputSlot>
+                                </Input>
+                                <FormControlHelper>
+                                    <FormControlHelperText>
+                                        Пароль должен содержать не менее 8 символов
+                                    </FormControlHelperText>
+                                </FormControlHelper>
+                            </FormControl>
+
+                            <FormControl
+                                isInvalid={!!errors?.length}
+                            >
+                                {errors?.map(error => (
+                                    <FormControlError key={error.code}>
+                                        <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>
+                                        <FormControlErrorText className={'text-red-500'}>
+                                            {error.longMessage}
+                                        </FormControlErrorText>
+                                    </FormControlError>
+                                ))}
+                            </FormControl>
+
+                            <Button
+                                className={'mt-2'}
+                                onPress={onSignUpPress}
+                                isDisabled={!isValid}
+                            >
+                                {loading ? (
+                                    <>
+                                        <ButtonSpinner color={'gray'}/>
+                                        <ButtonText className={'font-medium'}> Загрузка... </ButtonText>
+                                    </>
+                                ) : (
+                                    <ButtonText>Дальше</ButtonText>
+                                )}
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Text>Введите код подтверждения, отправленный на ваш email</Text>
+                            <FormControl
+                                isInvalid={!!errors?.length}
+                            >
+                                <FormControlLabel>
+                                    <FormControlLabelText>Код</FormControlLabelText>
+                                </FormControlLabel>
+                                <Input>
+                                    <InputField
+                                        value={code}
+                                        placeholder={'Введите код подтверждения'}
+                                        onChangeText={(code) => setCode(code)}
+                                    />
+                                </Input>
+                            </FormControl>
+                            <FormControl
+                                isInvalid={!!errors?.length}
+                            >
+                                {errors?.map(error => (
+                                    <FormControlError key={error.code}>
+                                        <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>
+                                        <FormControlErrorText className={'text-red-500'}>
+                                            {error.longMessage}
+                                        </FormControlErrorText>
+                                    </FormControlError>
+                                ))}
+                            </FormControl>
+
+                            <Button
+                                className={'mt-2'}
+                                onPress={onVerifyPress}
+                                isDisabled={!code.length}
+                            >
+                                {loadingVerify ? (
+                                    <>
+                                        <ButtonSpinner color={'gray'}/>
+                                        <ButtonText className={'font-medium'}> Проверяем... </ButtonText>
+                                    </>
+                                ) : (
+                                    <ButtonText>Подтвердить</ButtonText>
+                                )}
+                            </Button>
+                        </>
+                    )}
+
+                    {!pendingVerification && (
+                        <HStack className={'gap-1.5'}>
+                            <Text>Уже есть аккаунт?</Text>
+                            <Link href="/sign-in">
+                                <Text className={'underline'}>Войти</Text>
+                            </Link>
+                        </HStack>
+                    )}
+                </VStack>
+            </SafeAreaView>
         </View>
+
     )
 }
 
-export default SignUpScreen
+export default SignUp

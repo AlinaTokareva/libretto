@@ -12,7 +12,7 @@ import {
     FormControl,
     FormControlError,
     FormControlErrorIcon,
-    FormControlErrorText, FormControlHelper, FormControlHelperText,
+    FormControlErrorText,
     FormControlLabel,
     FormControlLabelText
 } from '@/components/ui/form-control'
@@ -22,7 +22,6 @@ import {Heading} from '@/components/ui/heading'
 import {LockKeyholeOpenIcon} from 'lucide-react-native'
 import {ClerkAPIError} from '@clerk/types'
 import {useToggle} from '@/components/hooks/useToggle'
-import {isLoading} from 'expo-font'
 
 
 const SignIn = () => {
@@ -91,7 +90,6 @@ const SignIn = () => {
                     <Heading size={'3xl'}>Войти</Heading>
                     <FormControl
                         isInvalid={!!errors?.length}
-                        size={'md'}
                     >
                         <FormControlLabel>
                             <FormControlLabelText>Email</FormControlLabelText>
@@ -106,38 +104,44 @@ const SignIn = () => {
                                 onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
                             />
                         </Input>
-                        <FormControlLabel className={'mt-2'}>
+                    </FormControl>
+                    <FormControl
+                        isInvalid={!!errors?.length}
+                    >
+                        <FormControlLabel>
                             <FormControlLabelText>Пароль</FormControlLabelText>
                         </FormControlLabel>
                         <Input>
-                            <InputSlot className="pl-3">
+                            <InputSlot className={'pl-3'}>
                                 <InputIcon as={LockKeyholeOpenIcon}/>
                             </InputSlot>
                             <InputField
                                 value={password}
-                                placeholder="Введите пароль"
+                                placeholder={'Введите пароль'}
                                 type={showPassword ? 'text' : 'password'}
                                 onChangeText={(password) => setPassword(password)}
                             />
-                            <InputSlot className="pr-3" onPress={toggleShowPassword}>
+                            <InputSlot className={'pr-3'} onPress={toggleShowPassword}>
                                 <InputIcon as={showPassword ? EyeIcon : EyeOffIcon}/>
                             </InputSlot>
                         </Input>
-                        <FormControlError>
-                            <FormControlErrorIcon as={AlertCircleIcon} className="text-red-500"/>
-                            <FormControlErrorText className="text-red-500">
-                                {errors?.map(item => item.longMessage).concat('')}
-                            </FormControlErrorText>
-                        </FormControlError>
-                        {!isValid && (
-                            <FormControlHelper>
-                                <FormControlHelperText>Заполните поля для входа</FormControlHelperText>
-                            </FormControlHelper>
-                        )}
+                    </FormControl>
+
+                    <FormControl
+                        isInvalid={!!errors?.length}
+                    >
+                        {errors?.map(error => (
+                            <FormControlError key={error.code}>
+                                <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>
+                                <FormControlErrorText className={'text-red-500'}>
+                                    {error.longMessage}
+                                </FormControlErrorText>
+                            </FormControlError>
+                        ))}
                     </FormControl>
 
                     <Button
-                        className={'mt-4'}
+                        className={'mt-2'}
                         onPress={onSignInPress}
                         isDisabled={!isValid}
                     >
@@ -150,7 +154,8 @@ const SignIn = () => {
                             <ButtonText>Войти</ButtonText>
                         )}
                     </Button>
-                    <HStack className={'justify-between'}>
+
+                    <HStack className={'gap-1.5'}>
                         <Text>Нет аккаунта?</Text>
                         <Link href="/sign-up">
                             <Text className={'underline'}>Зарегистрироваться</Text>
