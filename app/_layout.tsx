@@ -1,11 +1,7 @@
 import {GluestackUIProvider} from '@/components/ui/gluestack-ui-provider'
 import '@/global.css'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import {
-    DarkTheme,
-    DefaultTheme,
-    ThemeProvider
-} from '@react-navigation/native'
+import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native'
 import {useFonts} from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import {useEffect} from 'react'
@@ -13,6 +9,7 @@ import {Slot} from 'expo-router'
 import {ClerkProvider} from '@clerk/clerk-expo'
 import {tokenCache} from '@clerk/clerk-expo/token-cache'
 import {useColorScheme} from '@/components/useColorScheme'
+import {StatusBar} from 'expo-status-bar'
 
 
 export {ErrorBoundary} from 'expo-router'
@@ -36,13 +33,14 @@ export default function RootLayout() {
             SplashScreen.hideAsync()
         }
     }, [loaded,])
-    
+
 
     return (
         <ClerkProvider tokenCache={tokenCache}>
             <GluestackUIProvider mode={colorScheme || 'light'}>
                 <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                     <Slot/>
+                    <StatusBar/>
                 </ThemeProvider>
             </GluestackUIProvider>
         </ClerkProvider>
