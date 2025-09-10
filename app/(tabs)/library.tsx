@@ -1,7 +1,6 @@
-import {StyleSheet, Image} from 'react-native'
+import {Image, StyleSheet} from 'react-native'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import {View} from '@/components/Themed'
-import {VStack} from '@/components/ui/vstack'
 import {Center} from '@/components/ui/center'
 
 
@@ -33,7 +32,7 @@ const Library = () => {
             <SafeAreaView>
                 <Center className={'w-full flex-row flex-wrap'}>
                     {/*<VStack style={styles.box}>*/}
-                        {books}
+                    {books}
                     {/*</VStack>*/}
                 </Center>
             </SafeAreaView>

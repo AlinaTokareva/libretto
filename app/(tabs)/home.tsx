@@ -69,7 +69,7 @@ export default function Home() {
                                 <VStack>
                                     <Image
                                         source={require('@/assets/images/book_covers/unnamed.jpg')}
-                                        className="w-[140px] h-[200px] rounded-md aspect-[5/8]"
+                                        className="w-[140px] h-[200px] rounded-md aspect-cover"
                                         alt="book"
                                     />
                                 </VStack>
@@ -104,7 +104,7 @@ export default function Home() {
                                 <VStack>
                                     <Image
                                         source={require('@/assets/images/book_covers/e47f1f07-f763-4bef-bdd4-bb1cdff613db.jpg')}
-                                        className="w-[140px] h-[200px] rounded-md aspect-[5/8]"
+                                        className="w-[140px] h-[200px] rounded-md aspect-cover"
                                         alt="book"
                                     />
                                 </VStack>
