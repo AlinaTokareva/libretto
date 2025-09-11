@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {isClerkAPIResponseError, useSignIn} from '@clerk/clerk-expo'
-import {Link, useRouter} from 'expo-router'
+import {useRouter} from 'expo-router'
 import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input'
 import {Button, ButtonSpinner, ButtonText} from '@/components/ui/button'
 import {VStack} from '@/components/ui/vstack'
@@ -20,19 +19,18 @@ import {Center} from '@/components/ui/center'
 import SignInSvg from '@/assets/svg/SignInSvg'
 import {Heading} from '@/components/ui/heading'
 import {LockKeyholeOpenIcon} from 'lucide-react-native'
-import {ClerkAPIError} from '@clerk/types'
 import {useToggle} from '@/components/hooks/useToggle'
 import {TouchableOpacity} from 'react-native'
+import {supabase} from '@/config/initSupabase'
 
 
 const SignIn = () => {
-    const {signIn, setActive, isLoaded,} = useSignIn()
     const router = useRouter()
 
     const [emailAddress, setEmailAddress,] = useState('')
     const [password, setPassword,] = useState('')
 
-    const [errors, setErrors,] = useState<ClerkAPIError[]>([])
+    const [errors, setErrors,] = useState<[]>([])
     const [isValid, setIsValid,] = useState(false)
     const [showPassword, toggleShowPassword,] = useToggle(false)
     const [loading, setLoading,] = useState(false)
@@ -46,7 +44,6 @@ const SignIn = () => {
     const onSignInPress = async () => {
         setErrors([])
 
-        if (!isLoaded) return
         if (!isValid) return
         if (loading) return
 
@@ -55,24 +52,16 @@ const SignIn = () => {
         const emailAddressN = emailAddress.trim().toLowerCase()
 
         //Запуск процесса входа, через электронную почту и пароль
-        try {
-            const signInAttempt = await signIn.create({
-                identifier: emailAddressN,
-                password,
-            })
+        const {error,} = await supabase.auth.signInWithPassword({
+            email: emailAddressN,
+            password,
+        })
 
-            //Добавление сессии и редирект
-            if (signInAttempt.status === 'complete') {
-                await setActive({session: signInAttempt.createdSessionId,})
-                router.replace('/home')
-            } else {
-                console.log(JSON.stringify(signInAttempt, null, 2))
-                setLoading(false)
-            }
-        } catch (err) {
-            //Вывод ошибки
-            if (isClerkAPIResponseError(err)) setErrors(err.errors)
-            console.log(JSON.stringify(err, null, 2))
+        if (!error) {
+            router.replace('/home')
+        } else {
+            // setErrors(error.message)
+            console.log(JSON.stringify(error.message, null, 2))
             setLoading(false)
         }
     }
@@ -128,18 +117,18 @@ const SignIn = () => {
                         </Input>
                     </FormControl>
 
-                    <FormControl
-                        isInvalid={!!errors?.length}
-                    >
-                        {errors?.map(error => (
-                            <FormControlError key={error.code}>
-                                <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>
-                                <FormControlErrorText className={'text-red-500'}>
-                                    {error.longMessage}
-                                </FormControlErrorText>
-                            </FormControlError>
-                        ))}
-                    </FormControl>
+                    {/*<FormControl*/}
+                    {/*    isInvalid={!!errors?.length}*/}
+                    {/*>*/}
+                    {/*    {errors?.map(error => (*/}
+                    {/*        <FormControlError key={error.code}>*/}
+                    {/*            <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>*/}
+                    {/*            <FormControlErrorText className={'text-red-500'}>*/}
+                    {/*                {error.longMessage}*/}
+                    {/*            </FormControlErrorText>*/}
+                    {/*        </FormControlError>*/}
+                    {/*    ))}*/}
+                    {/*</FormControl>*/}
 
                     <Button
                         className={'mt-2'}

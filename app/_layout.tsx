@@ -5,11 +5,10 @@ import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native'
 import {useFonts} from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import {useEffect} from 'react'
-import {Slot} from 'expo-router'
-import {ClerkProvider} from '@clerk/clerk-expo'
-import {tokenCache} from '@clerk/clerk-expo/token-cache'
+import {Slot, useRouter, useSegments} from 'expo-router'
 import {useColorScheme} from '@/components/useColorScheme'
 import {StatusBar} from 'expo-status-bar'
+import {AuthProvider, useAuth} from '@/providers/AuthProvider'
 
 
 export {ErrorBoundary} from 'expo-router'
@@ -35,14 +34,33 @@ export default function RootLayout() {
     }, [loaded,])
 
 
+    const {session, initialized,} = useAuth()
+    const segments = useSegments()
+    const router = useRouter()
+
+    useEffect(() => {
+        if (!initialized) return
+
+        // Check if the path/url is in the (auth) group
+        const inAuthGroup = segments[0] === '(auth)'
+
+        if (session && !inAuthGroup) {
+            // Redirect authenticated users to the list page
+            router.replace('/home')
+        } else if (!session) {
+            // Redirect unauthenticated users to the login page
+            router.replace('/')
+        }
+    }, [session, initialized,])
+
     return (
-        <ClerkProvider tokenCache={tokenCache}>
+        <AuthProvider>
             <GluestackUIProvider mode={colorScheme || 'light'}>
                 <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
                     <Slot/>
                     <StatusBar/>
                 </ThemeProvider>
             </GluestackUIProvider>
-        </ClerkProvider>
+        </AuthProvider>
     )
 }

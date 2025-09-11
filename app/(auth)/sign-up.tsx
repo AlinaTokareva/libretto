@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {isClerkAPIResponseError, useSignUp} from '@clerk/clerk-expo'
-import {Link, useRouter} from 'expo-router'
+import {useRouter} from 'expo-router'
 import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input'
 import {AlertCircleIcon, AtSignIcon, EyeIcon, EyeOffIcon} from '@/components/ui/icon'
 import {Button, ButtonSpinner, ButtonText} from '@/components/ui/button'
@@ -20,16 +19,14 @@ import {Heading} from '@/components/ui/heading'
 import {HStack} from '@/components/ui/hstack'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import {VStack} from '@/components/ui/vstack'
-import {ClerkAPIError} from '@clerk/types'
 import {useToggle} from '@/components/hooks/useToggle'
 import RecipeBook from '@/assets/svg/RecipeBook'
 import {LockKeyholeOpenIcon} from 'lucide-react-native'
-import {ruRU} from '@/config/clerk/ru-RU'
 import {TouchableOpacity} from 'react-native'
+import {supabase} from '@/config/initSupabase'
 
 
 const SignUp = () => {
-    const {isLoaded, signUp, setActive,} = useSignUp()
     const router = useRouter()
 
     const [emailAddress, setEmailAddress,] = useState('')
@@ -40,7 +37,7 @@ const SignUp = () => {
     const [pendingVerification, setPendingVerification,] = useState(false)
     const [code, setCode,] = useState('')
 
-    const [errors, setErrors,] = useState<ClerkAPIError[]>([])
+    // const [errors, setErrors,] = useState<[]>([])
     const [isValid, setIsValid,] = useState(false)
     const [showPassword, toggleShowPassword,] = useToggle(false)
     const [loading, setLoading,] = useState(false)
@@ -52,36 +49,35 @@ const SignUp = () => {
 
 
     //Верификация
-    const onVerifyPress = async () => {
-        setErrors([])
-
-        if (!isLoaded) return
-        setLoadingVerify(true)
-
-        try {
-            const signUpAttempt = await signUp.attemptEmailAddressVerification({
-                code,
-            })
-
-            //Добавление сессии и редирект
-            if (signUpAttempt.status === 'complete') {
-                await setActive({session: signUpAttempt.createdSessionId,})
-                router.replace('/')
-            } else {
-                console.log(JSON.stringify(signUpAttempt, null, 2))
-                setLoadingVerify(false)
-            }
-        } catch (err) {
-            if (isClerkAPIResponseError(err)) setErrors(err.errors)
-            console.log(JSON.stringify(err, null, 2))
-            setLoadingVerify(false)
-        }
-    }
+    // const onVerifyPress = async () => {
+    //     setErrors([])
+    //
+    //     if (!isLoaded) return
+    //     setLoadingVerify(true)
+    //
+    //     try {
+    //         const signUpAttempt = await signUp.attemptEmailAddressVerification({
+    //             code,
+    //         })
+    //
+    //         //Добавление сессии и редирект
+    //         if (signUpAttempt.status === 'complete') {
+    //             await setActive({session: signUpAttempt.createdSessionId,})
+    //             router.replace('/')
+    //         } else {
+    //             console.log(JSON.stringify(signUpAttempt, null, 2))
+    //             setLoadingVerify(false)
+    //         }
+    //     } catch (err) {
+    //         if (isClerkAPIResponseError(err)) setErrors(err.errors)
+    //         console.log(JSON.stringify(err, null, 2))
+    //         setLoadingVerify(false)
+    //     }
+    // }
 
 
     //Кнопка "Зарегистрироваться"
     const onSignUpPress = async () => {
-        if (!isLoaded) return
         if (!isValid) return
         if (loading) return
 
@@ -89,34 +85,22 @@ const SignUp = () => {
 
         const emailAddressN = emailAddress.trim().toLowerCase()
 
-        try {
-            await signUp.create({
-                emailAddress: emailAddressN,
-                password,
-                firstName,
-                lastName,
-            })
+        const {error,} = await supabase.auth.signUp({
+            email: emailAddressN,
+            password: password,
+        })
 
-            //Отправка пользователю email с кодом проверки
-            await signUp.prepareEmailAddressVerification({strategy: 'email_code',})
-
-            setPendingVerification(true)
-        } catch (err) {
-            //Вывод ошибки
-            if (isClerkAPIResponseError(err)) {
-                const errors = err.errors.map(error => {
-                    // @ts-ignore
-                    const ruMessage = ruRU.unstable__errors[error.code] as string
-                    return {
-                        ...error,
-                        longMessage: ruMessage,
-                    }
-                })
-                setErrors(errors)
-            }
-            console.log(JSON.stringify(err, null, 2))
+        if (error) {
+            // setErrors(error)
+            console.log(JSON.stringify(error, null, 2))
             setLoading(false)
         }
+
+        //Отправка пользователю email с кодом проверки
+        // await signUp.prepareEmailAddressVerification({strategy: 'email_code',})
+
+        // setPendingVerification(true)
+
     }
 
     return (
@@ -135,7 +119,7 @@ const SignUp = () => {
                         <>
 
                             <FormControl
-                                isInvalid={!!errors?.length}
+                                // isInvalid={!!errors?.length}
                             >
                                 <HStack className={'flex gap-3'}>
                                     <VStack className={'flex-1'}>
@@ -165,7 +149,7 @@ const SignUp = () => {
                                 </HStack>
                             </FormControl>
                             <FormControl
-                                isInvalid={!!errors?.length}
+                                // isInvalid={!!errors?.length}
                                 isRequired={true}
                             >
                                 <FormControlLabel>
@@ -183,7 +167,7 @@ const SignUp = () => {
                                 </Input>
                             </FormControl>
                             <FormControl
-                                isInvalid={!!errors?.length}
+                                // isInvalid={!!errors?.length}
                                 isRequired={true}
                             >
                                 <FormControlLabel>
@@ -210,18 +194,18 @@ const SignUp = () => {
                                 </FormControlHelper>
                             </FormControl>
 
-                            <FormControl
-                                isInvalid={!!errors?.length}
-                            >
-                                {errors?.map(error => (
-                                    <FormControlError key={error.code}>
-                                        <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>
-                                        <FormControlErrorText className={'text-red-500'}>
-                                            {error.longMessage}
-                                        </FormControlErrorText>
-                                    </FormControlError>
-                                ))}
-                            </FormControl>
+                            {/*<FormControl*/}
+                            {/*    isInvalid={!!errors?.length}*/}
+                            {/*>*/}
+                            {/*    {errors?.map(error => (*/}
+                            {/*        <FormControlError key={error.code}>*/}
+                            {/*            <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>*/}
+                            {/*            <FormControlErrorText className={'text-red-500'}>*/}
+                            {/*                {error.longMessage}*/}
+                            {/*            </FormControlErrorText>*/}
+                            {/*        </FormControlError>*/}
+                            {/*    ))}*/}
+                            {/*</FormControl>*/}
 
                             <Button
                                 className={'mt-2'}
@@ -242,7 +226,7 @@ const SignUp = () => {
                         <>
                             <Text>Введите код подтверждения, отправленный на ваш email</Text>
                             <FormControl
-                                isInvalid={!!errors?.length}
+                                // isInvalid={!!errors?.length}
                             >
                                 <FormControlLabel>
                                     <FormControlLabelText>Код</FormControlLabelText>
@@ -255,22 +239,22 @@ const SignUp = () => {
                                     />
                                 </Input>
                             </FormControl>
-                            <FormControl
-                                isInvalid={!!errors?.length}
-                            >
-                                {errors?.map(error => (
-                                    <FormControlError key={error.code}>
-                                        <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>
-                                        <FormControlErrorText className={'text-red-500'}>
-                                            {error.longMessage}
-                                        </FormControlErrorText>
-                                    </FormControlError>
-                                ))}
-                            </FormControl>
+                            {/*<FormControl*/}
+                            {/*    isInvalid={!!errors?.length}*/}
+                            {/*>*/}
+                            {/*    {errors?.map(error => (*/}
+                            {/*        <FormControlError key={error.code}>*/}
+                            {/*            <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>*/}
+                            {/*            <FormControlErrorText className={'text-red-500'}>*/}
+                            {/*                {error.longMessage}*/}
+                            {/*            </FormControlErrorText>*/}
+                            {/*        </FormControlError>*/}
+                            {/*    ))}*/}
+                            {/*</FormControl>*/}
 
                             <Button
                                 className={'mt-2'}
-                                onPress={onVerifyPress}
+                                // onPress={onVerifyPress}
                                 isDisabled={!code.length}
                             >
                                 {loadingVerify ? (

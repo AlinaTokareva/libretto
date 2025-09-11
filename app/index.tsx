@@ -7,17 +7,12 @@ import {Text} from '@/components/ui/text'
 import {Center} from '@/components/ui/center'
 import {View} from '@/components/Themed'
 import {ArrowRight} from 'lucide-react-native'
-import {useAuth} from '@clerk/clerk-expo'
 import React from 'react'
 
 
 export default function Index() {
     const router = useRouter()
-    const {isSignedIn,} = useAuth()
 
-    if (isSignedIn) {
-        return <Redirect href={'/home'}/>
-    }
 
     return (
         <View>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {View} from '@/components/Themed'
 import {ImageBackground} from '@/components/ui/image-background'
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context'
@@ -11,18 +11,52 @@ import {useRouter} from 'expo-router'
 import {Center} from '@/components/ui/center'
 import {lorem} from '@/assets/lorem'
 import * as ImagePicker from 'expo-image-picker'
+import * as FileSystem from 'expo-file-system'
 import {HStack} from '@/components/ui/hstack'
 import {BookImageIcon, BookOpenIcon} from 'lucide-react-native'
 import {Image} from '@/components/ui/image'
 import {Fab, FabIcon, FabLabel} from '@/components/ui/fab'
+import {useAuth} from '@/providers/AuthProvider'
+import {supabase} from '@/config/initSupabase'
+import {decode} from 'base64-arraybuffer'
 
 
 const Book = () => {
     const router = useRouter()
     const {height,} = Dimensions.get('screen')
 
+    const {user,} = useAuth()
+    // const [files, setFiles,] = useState<FileObject[]>([])
+
+    const [image, setImage,] = useState<string>('https://debmzclwmvddseqdgtex.supabase.co/storage/v1/object/sign/BookCovers/default.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wY2I0MjljMy1mMmE2LTQ0Y2YtYTQyZi05ODI5Y2JhN2RmMGYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJCb29rQ292ZXJzL2RlZmF1bHQuanBnIiwiaWF0IjoxNzU3NjE1NTQ5LCJleHAiOjE3NTgyMjAzNDl9.HHBCT8r83Jc5R2oAZL8lVPKrWk17LlTwZfW4mKMCQmc')
+    const [imageLoading, setImageLoading,] = useState<boolean>(true)
+
+
+    useEffect(() => {
+        if (!user) return
+        loadImages()
+    }, [user,])
+
+    const loadImages = async () => {
+        const {data,} = await supabase.storage.from('BookCovers').list(user!.id)
+
+        if (data) {
+            supabase.storage
+                .from('BookCovers')
+                .download(`${user!.id}/${data[data.length - 1].name}`)
+                .then(({data,}) => {
+                    const fr = new FileReader()
+                    fr.readAsDataURL(data!)
+                    fr.onload = () => {
+                        setImage(fr.result as string)
+                        setImageLoading(false)
+                    }
+                })
+        }
+    }
+
     const pickImageAsync = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+        const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images',],
             allowsEditing: true,
             aspect: [5, 8,],
@@ -30,11 +64,17 @@ const Book = () => {
         })
 
         if (!result.canceled) {
-            console.log(result)
+            setImageLoading(true)
+            const img = result.assets[0]
+            const base64 = await FileSystem.readAsStringAsync(img.uri, {encoding: 'base64',})
+            const filePath = `${user!.id}/${new Date().getTime()}.png` //todo - id'шник книги
+            const contentType = img.type === 'image' ? 'image/png' : 'video/mp4'
+            await supabase.storage.from('BookCovers').upload(filePath, decode(base64), {contentType,})
+            await loadImages()
         }
     }
 
-    let source = {uri: 'https://imo10.labirint.ru/books/925681/cover.jpg/236-0',}
+    let source = {uri: image,}
     return (
         <SafeAreaProvider>
             <SafeAreaView edges={['left', 'right', 'bottom',]}>
@@ -83,6 +123,7 @@ const Book = () => {
                                 <Heading size="xl" className="mb-1">
                                     Маленькие женщины
                                 </Heading>
+
                             </Center>
 
                             <ScrollView>
