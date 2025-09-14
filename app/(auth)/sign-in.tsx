@@ -21,7 +21,8 @@ import {Heading} from '@/components/ui/heading'
 import {LockKeyholeOpenIcon} from 'lucide-react-native'
 import {useToggle} from '@/components/hooks/useToggle'
 import {TouchableOpacity} from 'react-native'
-import {supabase} from '@/config/initSupabase'
+import {supabase} from '@/config/supabase'
+import {isAuthApiError} from '@supabase/auth-js'
 
 
 const SignIn = () => {
@@ -30,7 +31,7 @@ const SignIn = () => {
     const [emailAddress, setEmailAddress,] = useState('')
     const [password, setPassword,] = useState('')
 
-    const [errors, setErrors,] = useState<[]>([])
+    const [error, setError,] = useState<string | undefined>()
     const [isValid, setIsValid,] = useState(false)
     const [showPassword, toggleShowPassword,] = useToggle(false)
     const [loading, setLoading,] = useState(false)
@@ -42,26 +43,27 @@ const SignIn = () => {
 
     //Кнопка "Войти"
     const onSignInPress = async () => {
-        setErrors([])
+        setError(undefined)
 
         if (!isValid) return
         if (loading) return
 
         setLoading(true)
 
-        const emailAddressN = emailAddress.trim().toLowerCase()
-
         //Запуск процесса входа, через электронную почту и пароль
         const {error,} = await supabase.auth.signInWithPassword({
-            email: emailAddressN,
-            password,
+            email: emailAddress.trim().toLowerCase(),
+            password: password.trim(),
         })
 
         if (!error) {
             router.replace('/home')
         } else {
-            // setErrors(error.message)
-            console.log(JSON.stringify(error.message, null, 2))
+            setError(error.message)
+            if (isAuthApiError(error)) {
+                console.log('yeah')
+            }
+            console.log(JSON.stringify(error, null, 2))
             setLoading(false)
         }
     }
@@ -79,7 +81,7 @@ const SignIn = () => {
                     </Center>
                     <Heading size={'3xl'}>Войти</Heading>
                     <FormControl
-                        isInvalid={!!errors?.length}
+                        isInvalid={!!error}
                     >
                         <FormControlLabel>
                             <FormControlLabelText>Email</FormControlLabelText>
@@ -96,7 +98,7 @@ const SignIn = () => {
                         </Input>
                     </FormControl>
                     <FormControl
-                        isInvalid={!!errors?.length}
+                        isInvalid={!!error}
                     >
                         <FormControlLabel>
                             <FormControlLabelText>Пароль</FormControlLabelText>
@@ -117,18 +119,16 @@ const SignIn = () => {
                         </Input>
                     </FormControl>
 
-                    {/*<FormControl*/}
-                    {/*    isInvalid={!!errors?.length}*/}
-                    {/*>*/}
-                    {/*    {errors?.map(error => (*/}
-                    {/*        <FormControlError key={error.code}>*/}
-                    {/*            <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>*/}
-                    {/*            <FormControlErrorText className={'text-red-500'}>*/}
-                    {/*                {error.longMessage}*/}
-                    {/*            </FormControlErrorText>*/}
-                    {/*        </FormControlError>*/}
-                    {/*    ))}*/}
-                    {/*</FormControl>*/}
+                    <FormControl
+                        isInvalid={!!error}
+                    >
+                        <FormControlError>
+                            <FormControlErrorIcon as={AlertCircleIcon} className={'text-red-500'}/>
+                            <FormControlErrorText className={'text-red-500'}>
+                                {error}
+                            </FormControlErrorText>
+                        </FormControlError>
+                    </FormControl>
 
                     <Button
                         className={'mt-2'}

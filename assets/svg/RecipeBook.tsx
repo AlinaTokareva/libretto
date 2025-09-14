@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Svg, {Path, G, Rect, Circle, Ellipse, SvgProps} from 'react-native-svg'
+import Svg, {Circle, Ellipse, G, Path, Rect, SvgProps} from 'react-native-svg'
 
 const RecipeBook = (props: SvgProps) => {
     return (

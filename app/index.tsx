@@ -1,5 +1,5 @@
 import {Button, ButtonIcon, ButtonText} from '@/components/ui/button'
-import {Redirect, useRouter} from 'expo-router'
+import {useRouter} from 'expo-router'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import WelcomeSvg from '@/assets/svg/WelcomeSvg'
 import {Heading} from '@/components/ui/heading'

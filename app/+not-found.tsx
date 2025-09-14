@@ -1,11 +1,10 @@
 import React from 'react'
-import {Link, router, Stack} from 'expo-router'
+import {router, Stack} from 'expo-router'
 import {Text} from '@/components/ui/text'
 import {Center} from '@/components/ui/center'
 import {View} from '@/components/Themed'
 import Error404Svg from '@/assets/svg/Error404Svg'
-import {Button, ButtonIcon, ButtonText} from '@/components/ui/button'
-import {ArrowRight, BackpackIcon, HomeIcon} from 'lucide-react-native'
+import {Button, ButtonText} from '@/components/ui/button'
 
 export default function NotFoundScreen() {
     return (
@@ -17,12 +16,12 @@ export default function NotFoundScreen() {
                         width: '100%',
                         height: 300,
                     }}/>
-                    <Text className="text-secondary-600">Данный экран не существует!</Text>
+                    <Text className="text-secondary-900">Данный экран не существует!</Text>
                     <Button
-                        className={'mt-2'}
-                        size={'md'}
+                        className={'mt-4'}
+                        size={'lg'}
                         onPress={() => {
-                            router.push('/')
+                            router.push('/home')
                         }}
                     >
                         <ButtonText>На главную</ButtonText>

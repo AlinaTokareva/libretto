@@ -17,7 +17,7 @@ import {BookImageIcon, BookOpenIcon} from 'lucide-react-native'
 import {Image} from '@/components/ui/image'
 import {Fab, FabIcon, FabLabel} from '@/components/ui/fab'
 import {useAuth} from '@/providers/AuthProvider'
-import {supabase} from '@/config/initSupabase'
+import {supabase} from '@/config/supabase'
 import {decode} from 'base64-arraybuffer'
 
 

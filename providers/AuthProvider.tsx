@@ -1,6 +1,6 @@
 import React, {createContext, PropsWithChildren, useEffect, useState} from 'react'
 import {Session, User} from '@supabase/supabase-js'
-import {supabase} from '@/config/initSupabase'
+import {supabase} from '@/config/supabase'
 
 type AuthProps = {
     user: User | null
@@ -24,6 +24,7 @@ export const AuthProvider = ({children,}: PropsWithChildren) => {
     useEffect(() => {
         // Listen for changes to authentication state
         const {data,} = supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log('state changed')
             setSession(session)
             setUser(session ? session.user : null)
             setInitialized(true)
@@ -45,5 +46,5 @@ export const AuthProvider = ({children,}: PropsWithChildren) => {
         signOut,
     }
 
-    return <AuthContext.Provider value={value}> {children} </AuthContext.Provider>
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

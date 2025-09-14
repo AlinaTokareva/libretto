@@ -1,13 +1,13 @@
-import {Link, Redirect, Stack} from 'expo-router'
-// import {useAuth} from '@clerk/clerk-expo'
+import {Redirect, Stack} from 'expo-router'
+import {useAuth} from '@/providers/AuthProvider'
 
 
 export default function AuthRoutesLayout() {
-    // const {isSignedIn,} = useAuth()
-    //
-    // if (isSignedIn) {
-    //     return <Redirect href={'/'}/>
-    // }
+    const {session,} = useAuth()
+
+    if (session) {
+        return <Redirect href={'/home'}/>
+    }
 
     return (
         <Stack

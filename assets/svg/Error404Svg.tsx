@@ -1,5 +1,5 @@
 import * as React from 'react'
-import Svg, {Path, G, Circle, SvgProps} from 'react-native-svg'
+import Svg, {Circle, G, Path, SvgProps} from 'react-native-svg'
 
 const Error404Svg = (props: SvgProps) => {
     return (
