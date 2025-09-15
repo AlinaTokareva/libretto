@@ -2,7 +2,7 @@ import {Tabs} from 'expo-router'
 import React from 'react'
 import {Colors} from '@/constants/Colors'
 import {useColorScheme} from '@/components/useColorScheme'
-import {MaterialIcons} from '@expo/vector-icons'
+import {Ionicons, MaterialIcons, Octicons} from '@expo/vector-icons'
 
 
 export default function TabLayout() {
@@ -30,11 +30,11 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name={'favorite'}
+                name={'wishlist'}
                 options={{
-                    title: 'Избранное',
+                    title: 'Вишлист',
                     headerShown: false,
-                    tabBarIcon: ({color,}) => <MaterialIcons color={color} size={28} name={'favorite'}/>,
+                    tabBarIcon: ({color,}) => <Octicons color={color} size={28} name={'sparkles-fill'}/>,
                 }}
             />
             <Tabs.Screen

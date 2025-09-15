@@ -39,7 +39,7 @@ export default function RootLayout() {
 
     useEffect(() => {
         if (!initialized) return
-        console.log(session)
+
         if (!session) {
             //Редирект на экран приветствия
             router.replace('/')

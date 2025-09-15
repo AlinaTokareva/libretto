@@ -20,15 +20,6 @@ export default function Home() {
 
     return (
         <View>
-            <Fab
-                size="xl"
-                placement="bottom right"
-                isHovered={false}
-                isDisabled={false}
-                isPressed={false}
-            >
-                <FabIcon as={AddIcon}/>
-            </Fab>
             <SafeAreaView className={'p-5'}>
                 <Box className={'gap-3'}>
                     <Input>

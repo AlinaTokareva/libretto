@@ -1,5 +1,5 @@
 import {Button, ButtonIcon, ButtonText} from '@/components/ui/button'
-import {useRouter} from 'expo-router'
+import {Redirect, useRouter} from 'expo-router'
 import {SafeAreaView} from 'react-native-safe-area-context'
 import WelcomeSvg from '@/assets/svg/WelcomeSvg'
 import {Heading} from '@/components/ui/heading'
@@ -8,11 +8,16 @@ import {Center} from '@/components/ui/center'
 import {View} from '@/components/Themed'
 import {ArrowRight} from 'lucide-react-native'
 import React from 'react'
+import {useAuth} from '@/providers/AuthProvider'
 
 
 export default function Index() {
     const router = useRouter()
+    const {session,} = useAuth()
 
+    if (session) {
+        return <Redirect href={'/home'}/>
+    }
 
     return (
         <View>
