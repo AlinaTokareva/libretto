@@ -3,7 +3,6 @@
     "name": "libretto",
     "slug": "libretto",
     "version": "1.0.0",
-    "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "starterkitexpo",
     "userInterfaceStyle": "automatic",
@@ -33,7 +32,8 @@
       "expo-web-browser",
       "expo-sqlite",
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-screen-orientation"
     ],
     "experiments": {
       "typedRoutes": true
