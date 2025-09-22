@@ -1,13 +1,14 @@
 import React, {useState} from 'react'
 import {View} from '@/components/Themed'
-import {Fab, FabIcon} from '@/components/ui/fab'
+import {Fab, FabIcon, FabLabel} from '@/components/ui/fab'
 import {AddIcon} from '@/components/ui/icon'
 import * as ImagePicker from 'expo-image-picker'
 import {Image} from '@/components/ui/image'
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context'
-import {ScrollView} from 'react-native'
 import {Heading} from '@/components/ui/heading'
 import {VStack} from '@/components/ui/vstack'
+import {Grid, GridItem} from '@/components/ui/grid'
+import {ScrollView} from 'react-native'
 
 
 type Wish = {
@@ -23,7 +24,7 @@ type WishRecord = {
     title?: string
 }
 
-const Profile = () => {
+const Wishlist = () => {
     const [wishes, setWishes,] = useState<Wish[]>([])
 
 
@@ -31,48 +32,62 @@ const Profile = () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images',],
             allowsEditing: false,
-            // base64: true,
-            quality: 1,
+            allowsMultipleSelection: true,
         })
 
-        setWishes([...wishes, {
-            id: result?.assets?.[0].assetId as string,
-            source: {uri: result?.assets?.[0].uri as string,},
-        },])
+        const uploadedWishes: Wish[] = result?.assets?.map(item => ({
+            id: item.assetId as string,
+            source: {
+                uri: item.uri as string,
+            },
+        })) || []
+
+        setWishes([...wishes, ...uploadedWishes,])
     }
 
     return (
         <SafeAreaProvider>
             <View>
                 <Fab
-                    size={'xl'}
+                    size={'md'}
                     placement={'bottom right'}
                     onPress={pickImage}
                 >
                     <FabIcon as={AddIcon}/>
+                    <FabLabel>Загрузить фото</FabLabel>
                 </Fab>
 
                 <SafeAreaView className={'p-5'}>
-                    <Heading size={'2xl'} className={'mb-3'}>Вишлист</Heading>
-                    <ScrollView>
-                        <VStack
-                            className={'flex-row flex-wrap'}
-                        >
-
-                            {wishes.map(item =>
-                                <Image
-                                    key={item.source.uri}
-                                    source={item.source}
-                                    className={'w-1/3 sm:w-1/4 md:w-1/5 aspect-cover rounded-md p-3'}
-                                    alt={'wish'}
-                                />
-                            )}
-                        </VStack>
-                    </ScrollView>
+                    <VStack>
+                        <Heading size={'2xl'} className={'mb-3'}>Вишлист</Heading>
+                        <ScrollView>
+                            <Grid
+                                className="gap-3"
+                                _extra={{
+                                    className: 'grid-cols-3 sm:grid-cols-4 md:grid-cols-6',
+                                }}
+                            >
+                                {wishes.map(item =>
+                                    <GridItem
+                                        key={item.source.uri}
+                                        _extra={{
+                                            className: 'col-span-1',
+                                        }}
+                                    >
+                                        <Image
+                                            source={item.source}
+                                            className={'w-full h-auto rounded-lg aspect-cover'}
+                                            alt={'wish'}
+                                        />
+                                    </GridItem>
+                                )}
+                            </Grid>
+                        </ScrollView>
+                    </VStack>
                 </SafeAreaView>
             </View>
         </SafeAreaProvider>
     )
 }
 
-export default Profile
+export default Wishlist
