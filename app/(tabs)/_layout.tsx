@@ -1,8 +1,8 @@
 import {Tabs} from 'expo-router'
 import React from 'react'
-import {Colors} from '@/constants/Colors'
+import {Colors, themeColor} from '@/constants/Colors'
 import {useColorScheme} from '@/components/useColorScheme'
-import {Ionicons, MaterialIcons, Octicons} from '@expo/vector-icons'
+import {MaterialIcons, Octicons} from '@expo/vector-icons'
 
 
 export default function TabLayout() {
@@ -11,6 +11,10 @@ export default function TabLayout() {
     return (
         <Tabs
             screenOptions={{
+                tabBarBadgeStyle: {
+                    backgroundColor: themeColor,
+                    color: 'white',
+                },
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 headerShown: false,
             }}>
@@ -31,6 +35,7 @@ export default function TabLayout() {
             />
             <Tabs.Screen
                 name={'wishlist'}
+
                 options={{
                     title: 'Вишлист',
                     headerShown: false,
@@ -40,6 +45,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name={'profile'}
                 options={{
+                    tabBarBadge: 2,
                     title: 'Профиль',
                     headerShown: false,
                     tabBarIcon: ({color,}) => <MaterialIcons color={color} size={28} name={'person'}/>,
