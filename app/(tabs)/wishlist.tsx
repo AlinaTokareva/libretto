@@ -1,14 +1,13 @@
 import React, {useState} from 'react'
 import {View} from '@/components/Themed'
 import {Fab, FabIcon, FabLabel} from '@/components/ui/fab'
-import {AddIcon, SearchIcon} from '@/components/ui/icon'
+import {AddIcon} from '@/components/ui/icon'
 import * as ImagePicker from 'expo-image-picker'
 import {Image} from '@/components/ui/image'
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context'
 import {Heading} from '@/components/ui/heading'
 import {Grid, GridItem} from '@/components/ui/grid'
 import {ScrollView} from 'react-native'
-import {Input, InputField, InputIcon, InputSlot} from '@/components/ui/input'
 import {Text} from '@/components/ui/text'
 import {Center} from '@/components/ui/center'
 import {HStack} from '@/components/ui/hstack'
@@ -41,6 +40,25 @@ const Wishlist = () => {
         })) || []
 
         setWishes([...wishes, ...uploadedWishes,])
+
+        fetch('/api/create', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: 'Книжка какая-то love',
+            }),
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    response.json().then(json => {
+                        console.log(json)
+                    })
+                } else {
+                    console.log('Network failed with response ' + response.status + ': ' + response.statusText)
+                }
+            })
+            .catch(function (resp) {
+                console.log(resp)
+            })
     }
 
     return (

@@ -5,15 +5,19 @@ import FontAwesome from '@expo/vector-icons/FontAwesome'
 import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native'
 import {useFonts} from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
-import {useEffect} from 'react'
+import {Suspense, useEffect} from 'react'
 import {Slot, useRouter} from 'expo-router'
 import {useColorScheme} from '@/components/useColorScheme'
 import {AuthProvider, useAuth} from '@/providers/AuthProvider'
+import {ActivityIndicator} from 'react-native'
+import {SQLiteProvider} from 'expo-sqlite'
+import {DATABASE_NAME} from '@/constants/database'
 
 
 export {ErrorBoundary} from 'expo-router'
 
 SplashScreen.preventAutoHideAsync()
+
 
 export default function RootLayout() {
     const router = useRouter()
@@ -51,13 +55,22 @@ export default function RootLayout() {
     }, [session, initialized,])
 
     return (
-        <AuthProvider>
-            <GluestackUIProvider mode={colorScheme || 'light'}>
-                <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                    <Slot/>
-                    <StatusBar/>
-                </ThemeProvider>
-            </GluestackUIProvider>
-        </AuthProvider>
+        <Suspense fallback={<ActivityIndicator size={'large'}/>}>
+            <SQLiteProvider
+                databaseName={DATABASE_NAME}
+                options={{enableChangeListener: true,}}
+                useSuspense
+            >
+
+                <AuthProvider>
+                    <GluestackUIProvider mode={colorScheme || 'light'}>
+                        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                            <Slot/>
+                            <StatusBar/>
+                        </ThemeProvider>
+                    </GluestackUIProvider>
+                </AuthProvider>
+            </SQLiteProvider>
+        </Suspense>
     )
 }
