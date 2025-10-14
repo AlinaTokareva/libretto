@@ -7,11 +7,12 @@ import {Image} from '@/components/ui/image'
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context'
 import {Heading} from '@/components/ui/heading'
 import {Grid, GridItem} from '@/components/ui/grid'
-import {ScrollView} from 'react-native'
+import {ScrollView, TouchableOpacity} from 'react-native'
 import {Text} from '@/components/ui/text'
 import {Center} from '@/components/ui/center'
 import {HStack} from '@/components/ui/hstack'
 import {Badge, BadgeText} from '@/components/Badge'
+import BookModal from '@/components/modals/BookModal'
 
 
 type Wish = {
@@ -23,7 +24,7 @@ type Wish = {
 
 const Wishlist = () => {
     const [wishes, setWishes,] = useState<Wish[]>([])
-
+    const [showModal, setShowModal,] = useState(false)
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -41,28 +42,30 @@ const Wishlist = () => {
 
         setWishes([...wishes, ...uploadedWishes,])
 
-        fetch('/api/create', {
-            method: 'POST',
-            body: JSON.stringify({
-                name: 'Книжка какая-то love',
-            }),
-        })
-            .then(function (response) {
-                if (response.ok) {
-                    response.json().then(json => {
-                        console.log(json)
-                    })
-                } else {
-                    console.log('Network failed with response ' + response.status + ': ' + response.statusText)
-                }
-            })
-            .catch(function (resp) {
-                console.log(resp)
-            })
+        // fetch('/api/create', {
+        //     method: 'POST',
+        //     body: JSON.stringify({
+        //         page: 1,
+        //         name: 'Книжка какая-то love',
+        //     }),
+        // })
+        //     .then(function (response) {
+        //         if (response.ok) {
+        //             response.json().then(json => {
+        //                 console.log(json)
+        //             })
+        //         } else {
+        //             console.log('Network failed with response ' + response.status + ': ' + response.statusText)
+        //         }
+        //     })
+        //     .catch(function (resp) {
+        //         console.log(resp)
+        //     })
     }
 
     return (
         <SafeAreaProvider>
+            <BookModal setShowModal={setShowModal} showModal={showModal}/>
             <View>
                 <Fab
                     size={'md'}
@@ -77,9 +80,12 @@ const Wishlist = () => {
                     <Heading size={'2xl'}>Вишлист</Heading>
 
                     <HStack className={'gap-2'}>
-                        <Badge action={'error'}>
-                            <BadgeText>Классика</BadgeText>
-                        </Badge>
+                        <TouchableOpacity onPress={() => setShowModal(true)}>
+
+                            <Badge action={'error'}>
+                                <BadgeText>Классика</BadgeText>
+                            </Badge>
+                        </TouchableOpacity>
                         <Badge>
                             <BadgeText>Фантастика</BadgeText>
                         </Badge>
@@ -105,6 +111,7 @@ const Wishlist = () => {
                                             className: 'col-span-1',
                                         }}
                                     >
+
                                         <Image
                                             source={item.source}
                                             className={'w-full h-auto rounded-lg aspect-cover'}

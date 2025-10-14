@@ -39,3 +39,4 @@ yarn-error.*
 
 # IDE settings
 .idea
+/app/generated/prisma
